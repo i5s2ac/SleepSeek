@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\JobsController;
+use App\Http\Controllers\ReservaController;
 
 
 /*
@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
     
 });
 
-Route::resource('jobs', JobsController::class);
+Route::resource('reservas', ReservaController::class);
 
 Route::get('/plazas', function () {
     return view('plazas');

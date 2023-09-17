@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class JobsModel extends Model
+class ReservaModel extends Model
 {
     
     use HasFactory;
 
     // Especifica el nombre de la tabla si no sigue las convenciones de Laravel
-    protected $table = 'jobs';
+    protected $table = 'reservas';
 
     // Definir los campos que serán asignables masivamente
     protected $fillable = [

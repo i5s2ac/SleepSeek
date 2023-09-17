@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
-use App\Models\JobsModel;
+use App\Models\ReservaModel;
 
 use Illuminate\Http\Request;
 
-class JobsController extends Controller
+class ReservaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $jobs = JobsModel::latest()->paginate(5);
+        $reservas = ReservaModel::latest()->paginate(5);
     
-        return view('jobs.index',compact('jobs'))
+        return view('reservas.index',compact('reservas'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -24,7 +24,7 @@ class JobsController extends Controller
      */
     public function create()
     {
-        return view('jobs.create');
+        return view('reservas.create');
     }
 
     /**
@@ -35,21 +35,21 @@ class JobsController extends Controller
     $request->validate([
         "title" => "required|max:30", 
         "description" => 'required|max:255',
-        "location" => "nullable",
-        "start_date" => "nullable",
-        "end_date" => "nullable",
-        "status" => "nullable",
+        "location" => "required",
+        "start_date" => "required",
+        "end_date" => "required",
+        "status" => "required",
     ]);
 
     // Creamos una nueva instancia de JobsModel
-    $job = new JobsModel($request->all());
+    $reserva = new ReservaModel($request->all());
 
     // Aquí asignas el correo del usuario autenticado:
-    $job->correo_creador = Auth::user()->email;
+    $reserva->correo_creador = Auth::user()->email;
 
-    $job->save();
+    $reserva->save();
 
-    return redirect()->route('jobs.index')->with('success', 'Trabajo creado exitosamente');
+    return redirect()->route('reservas.index')->with('success', 'Trabajo creado exitosamente');
     }
 
     /**
@@ -57,16 +57,24 @@ class JobsController extends Controller
      */
     public function show(string $id)
     {
-        return view('jobs.show',compact('job'));
+        $reserva = ReservaModel::find($id); // Asumiendo que tu modelo se llama "ReservaModel"
+
+        if(!$reserva) {
+            // Puedes manejar el caso en el que la reserva no se encuentre
+            return redirect()->route('reservas.index')->with('error', 'Reserva no encontrada');
+        }
+
+        return view('reservas.show', compact('reserva'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        $job = JobsModel::find($id);
-        return view('jobs.edit', compact('job'));
+        $reserva = ReservaModel::find($id);
+        return view('reservas.edit', compact('reserva'));
     }
     /**
      * Update the specified resource in storage.
@@ -76,16 +84,16 @@ class JobsController extends Controller
         $request->validate([
             "title" => "required|max:30",
             "description" => 'required|max:255',
-            "location" => "nullable",
-            "start_date" => "nullable",
-            "end_date" => "nullable",
-            "status" => "nullable",
+            "location" => "required",
+            "start_date" => "required",
+            "end_date" => "required",
+            "status" => "required",
         ]);
 
-        $job = JobsModel::find($id);
-        $job->update($request->all());
+        $reserva = ReservaModel::find($id);
+        $reserva->update($request->all());
 
-        return redirect()->route('jobs.index')
+        return redirect()->route('reservas.index')
                         ->with('success', 'Product updated successfully');
     }
 
@@ -95,10 +103,10 @@ class JobsController extends Controller
      */
     public function destroy(string $id)
     {
-        $job = JobsModel::find($id);
-        $job->delete();
+        $reserva = ReservaModel::find($id);
+        $reserva->delete();
 
-        return redirect()->route('jobs.index')
+        return redirect()->route('reservas.index')
                         ->with('success', 'Product deleted successfully');
     }
 

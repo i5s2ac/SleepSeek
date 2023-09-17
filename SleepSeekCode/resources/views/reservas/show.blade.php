@@ -12,7 +12,7 @@
 
                     <div class="mb-6 flex justify-between">
                         <h2>Show Job</h2>
-                        <a style="background-color: #007BFF; color: white; padding: 10px 24px; border-radius: 50px; text-decoration: none; display: inline-block;" href="{{ route('jobs.index') }}">
+                        <a style="background-color: #007BFF; color: white; padding: 10px 24px; border-radius: 50px; text-decoration: none; display: inline-block;" href="{{ route('reservas.index') }}">
                             Back
                         </a>
                     </div>
@@ -20,27 +20,27 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="form-group">
                             <strong>Title:</strong>
-                            {{ $job->title }}
+                            {{ $reserva->title }}
                         </div>
                         <div class="form-group">
                             <strong>Description:</strong>
-                            {{ $job->description }}
+                            {{ $reserva->description }}
                         </div>
                         <div class="form-group">
                             <strong>Location:</strong>
-                            {{ $job->location }}
+                            {{ $reserva->location }}
                         </div>
                         <div class="form-group">
                             <strong>Start Date:</strong>
-                            {{ $job->start_date }}
+                            {{ $reserva->start_date }}
                         </div>
                         <div class="form-group">
                             <strong>End Date:</strong>
-                            {{ $job->end_date }}
+                            {{ $reserva->end_date }}
                         </div>
                         <div class="form-group">
                             <strong>Status:</strong>
-                            {{ $job->status }}
+                            {{ $reserva->status }}
                         </div>
                     </div>
 

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('jobs', function (Blueprint $table) {
-            $table->id();  // ID único de la plaza
+        Schema::create('reservas', function (Blueprint $table) {
+            $table->id();
             $table->string('correo_creador')->unique(); 
             $table->string('title'); 
             $table->text('description'); 
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('start_date')->nullable();  
             $table->date('end_date')->nullable();  
             $table->string('status')->default('disponible');  
-            $table->timestamps();  // Crea las columnas 'created_at' y 'updated_at' automáticamente
+            $table->timestamps();
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jobs');
+        Schema::dropIfExists('reservas');
     }
 };
