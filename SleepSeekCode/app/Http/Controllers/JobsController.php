@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
 use App\Models\JobsModel;
 
 use Illuminate\Http\Request;
@@ -30,24 +31,25 @@ class JobsController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        
+{
+    $request->validate([
+        "title" => "required|max:30", 
+        "description" => 'required|max:255',
+        "location" => "nullable",
+        "start_date" => "nullable",
+        "end_date" => "nullable",
+        "status" => "nullable",
+    ]);
 
-        $request->validate([
-            "title"=>"required|max:30", 
-            "description"=>'required|max:255',
-            "location"=>"nullable",
-            "start_date"=>"nullable",
-            "end_date"=>"nullable",
-            "salary"=>"required",
-            "company"=>"required",
-            "status"=>"nullable",
-            
-        ]);
-    
-        JobsModel::create($request->all());
-    
-        return redirect()->route('jobs.index')->with('success', 'Trabajo creado exitosamente');
+    // Creamos una nueva instancia de JobsModel
+    $job = new JobsModel($request->all());
+
+    // Aquí asignas el correo del usuario autenticado:
+    $job->correo_creador = Auth::user()->email;
+
+    $job->save();
+
+    return redirect()->route('jobs.index')->with('success', 'Trabajo creado exitosamente');
     }
 
     /**
@@ -63,44 +65,41 @@ class JobsController extends Controller
      */
     public function edit(string $id)
     {
-        return view('jobs.edit',compact('job'));
-
+        $job = JobsModel::find($id);
+        return view('jobs.edit', compact('job'));
     }
-
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-
         $request->validate([
-            "title"=>"required|max:30", 
-            "description"=>'required|max:255',
-            "location"=>"nullable",
-            "start_date"=>"nullable",
-            "end_date"=>"nullable",
-            "salary"=>"required",
-            "company"=>"required",
-            "status"=>"nullable",
-            
+            "title" => "required|max:30",
+            "description" => 'required|max:255',
+            "location" => "nullable",
+            "start_date" => "nullable",
+            "end_date" => "nullable",
+            "status" => "nullable",
         ]);
 
+        $job = JobsModel::find($id);
         $job->update($request->all());
-    
-        return redirect()->route('jobs.index')
-                        ->with('success','Product updated successfully');
 
+        return redirect()->route('jobs.index')
+                        ->with('success', 'Product updated successfully');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
+        $job = JobsModel::find($id);
         $job->delete();
-    
-        return redirect()->route('jobs.index')
-                        ->with('success','Product deleted successfully');
 
+        return redirect()->route('jobs.index')
+                        ->with('success', 'Product deleted successfully');
     }
+
 }

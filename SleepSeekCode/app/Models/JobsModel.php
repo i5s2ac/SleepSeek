@@ -21,8 +21,6 @@ class JobsModel extends Model
         "location",
         "start_date",
         "end_date",
-        "salary",
-        "company",
         "status",
     ];
 

@@ -32,8 +32,6 @@
                                 <th class="px-4 py-2 border">Location</th>
                                 <th class="px-4 py-2 border">Start Date</th>
                                 <th class="px-4 py-2 border">End Date</th>
-                                <th class="px-4 py-2 border">Salario</th>
-                                <th class="px-4 py-2 border">Compañia</th>
                                 <th class="px-4 py-2 border">Status</th>
                                 <th class="px-4 py-2 border">Action</th>
                             </tr>
@@ -47,8 +45,6 @@
                                     <td class="border px-4 py-2">{{ $job->location }}</td>
                                     <td class="border px-4 py-2">{{ $job->start_date }}</td>
                                     <td class="border px-4 py-2">{{ $job->end_date }}</td>
-                                    <td class="border px-4 py-2">{{ $job->salary }}</td>
-                                    <td class="border px-4 py-2">{{ $job->company }}</td>
                                     <td class="border px-4 py-2">{{ $job->status }}</td>
                                     <td class="border px-4 py-2">
                                         <div class="flex justify-around">
@@ -57,7 +53,7 @@
                                             <form action="{{ route('jobs.destroy',$job->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-500 hover:underline hover:text-red-700" onclick="return confirm('¿Estás seguro de eliminar este trabajo?')">Delete</button>
+                                                <button type="submit" class="text-red-500 hover:underline hover:text-red-700">Delete</button>
                                             </form>
                                         </div>
                                     </td>
