@@ -13,8 +13,9 @@ class ReservaController extends Controller
      */
     public function index()
     {
-        $reservas = ReservaModel::latest()->paginate(5);
-    
+        // Aquí filtramos las reservas para mostrar solo las creadas por el usuario autenticado.
+        $reservas = ReservaModel::where('correo_creador', Auth::user()->email)->latest()->paginate(5);
+
         return view('reservas.index',compact('reservas'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }

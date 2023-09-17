@@ -21,11 +21,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Route::get('/dashboard', function () {
-    $reservas = ReservaModel::all();
+    $reservas = ReservaModel::where('correo_creador', '!=', auth()->user()->email)->get();
     return view('dashboard', compact('reservas'));
 })->middleware(['auth'])->name('dashboard');
+
 
 
 Route::middleware('auth')->group(function () {
