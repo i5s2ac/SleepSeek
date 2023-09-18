@@ -86,7 +86,11 @@
                                             <p class="text-sm text-white mb-2">Start Date: {{ $reserva->start_date }}</p>
                                             <p class="text-sm text-white mb-2">End Date: {{ $reserva->end_date }}</p>
                                             <p class="text-sm text-white mb-4">Status: {{ $reserva->status }}</p>
-                                            </div>
+                                        </div>
+                                        <!-- Botón absoluto en la parte inferior de la tarjeta -->
+                                        <a href="{{ route('reservas.show', $reserva->id) }}" class="absolute left-0 bottom-0 w-full p-4 bg-blue-500 hover:bg-blue-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">
+                                            ¡SleepIn Now!
+                                        </a>
                                     </div>
                                 @endif
                             @endforeach

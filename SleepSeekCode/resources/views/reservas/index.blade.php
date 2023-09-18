@@ -21,7 +21,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Lista de Trabajos') }}
+            {{ __('Lista de SleepPlaces') }}
         </h2>
     </x-slot>
 
@@ -32,7 +32,7 @@
                     <!-- Botón "Create New Reserva" -->
                     <div class="mb-6">
                         <a class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-6 rounded text-decoration-none inline-flex items-center" href="{{ route('reservas.create') }}">
-                            <i class="fas fa-plus mr-2"></i> Create New Reserva
+                            <i class="fas fa-plus mr-2"></i> Crear Nuevo SleepPlace
                         </a>
                     </div>
 
