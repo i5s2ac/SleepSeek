@@ -6,10 +6,15 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
+        <!-- Font Awesome y Alpine.js (tomados del index) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
         <!-- Script de Owl Carousel y jQuery (necesario para Owl Carousel) -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     </head>
+
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -46,30 +51,47 @@
         </div>
     @endif
 
-    <!-- Tarjetas de Reservas -->
-    <div class="py-6">
+     <!-- Tarjetas de Reservas en Carousel -->
+     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                @if($reservas->count() > 0)  <!-- Añadido: Comprobación para renderizar solo si hay reservas -->
+                @if($reservas->count() > 0)
                     <div class="p-6 bg-white border-b border-gray-200">
                         <!-- Carousel Container -->
                         <div class="owl-carousel owl-theme">
                             @foreach ($reservas as $reserva)
-                                @if (auth()->user()->id !== $reserva->user_id) <!-- Validación de usuario -->
-                                    <div class="card relative rounded overflow-hidden shadow-lg bg-white p-6">
-                                        <!-- Contenido de la tarjeta -->
-                                        <h3 class="font-bold text-xl mb-4">{{ $reserva->title }}</h3>
-                                        <p class="text-gray-700 mb-4">{{ Str::limit($reserva->description, 100) }}</p>
-                                        <p class="text-sm mb-2">Location: {{ $reserva->location }}</p>
-                                        <p class="text-sm mb-2">Start Date: {{ $reserva->start_date }}</p>
-                                        <p class="text-sm mb-2">End Date: {{ $reserva->end_date }}</p>
-                                        <p class="text-sm mb-4">Status: {{ $reserva->status }}</p>
+                                @if (auth()->user()->id !== $reserva->user_id)
+                                    <div x-data="{ activeImage: 0, open: false }" class="card relative rounded overflow-hidden shadow-lg">
+                                        
+                                        <!-- Carousel de Imágenes -->
+                                        @foreach($reserva->images as $index => $image)
+                                            <img src="{{ asset('images/' . $image->image_path) }}" alt="Reserva Image {{ $index + 1 }}" class="absolute top-0 left-0 w-full h-full object-cover" x-show="activeImage === {{ $index }}">
+                                        @endforeach
+
+                                        <!-- Botones para controlar el carrusel de imágenes -->
+                                        <button x-show="activeImage !== 0" @click="activeImage--" class="absolute z-10 top-1/2 transform -translate-y-1/2 left-2 bg-black bg-opacity-50 text-white rounded-full p-2 focus:outline-none">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </button>
+                                        <button x-show="activeImage !== {{ $reserva->images->count() - 1 }}" @click="activeImage++" class="absolute z-10 top-1/2 transform -translate-y-1/2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2 focus:outline-none">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </button>
+
+                                        <!-- Overlay con información de la tarjeta -->
+                                        <div class="relative p-6 bg-black bg-opacity-50">
+                                            <!-- Contenido de la tarjeta -->
+                                            <h3 class="font-bold text-xl text-white mb-4">{{ $reserva->title }}</h3>
+                                            <p class="text-white mb-4">{{ Str::limit($reserva->description, 100) }}</p>
+                                            <p class="text-sm text-white mb-2">Location: {{ $reserva->location }}</p>
+                                            <p class="text-sm text-white mb-2">Start Date: {{ $reserva->start_date }}</p>
+                                            <p class="text-sm text-white mb-2">End Date: {{ $reserva->end_date }}</p>
+                                            <p class="text-sm text-white mb-4">Status: {{ $reserva->status }}</p>
+                                            </div>
                                     </div>
                                 @endif
                             @endforeach
                         </div>
                     </div>
-                @endif <!-- Cierre de la comprobación -->
+                @endif
             </div>
         </div>
     </div>
@@ -96,3 +118,4 @@
         });
     </script>
 </x-app-layout>
+                    

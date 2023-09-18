@@ -89,4 +89,21 @@
             </div>
         </div>
     </div>
+
+    <script>
+    // Este código actualiza el texto para mostrar el número de archivos seleccionados
+    document.getElementById('images').addEventListener('change', function() {
+        const chosenFiles = this.files.length;
+        const fileLabel = document.getElementById('file-chosen');
+        
+        if (chosenFiles === 1) {
+            fileLabel.textContent = this.files[0].name;
+        } else if (chosenFiles > 1) {
+            fileLabel.textContent = chosenFiles + ' archivos seleccionados';
+        } else {
+            fileLabel.textContent = 'No se ha seleccionado ningún archivo';
+        }
+    });
+    </script>
+    
 </x-app-layout>
