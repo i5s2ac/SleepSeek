@@ -24,17 +24,18 @@
 
     @php
         $detalle = auth()->user()->detalleUsuario;
-        $totalCampos = 7; // Total de campos en tu detalle de usuario
+        $totalCampos = 8; // Total de campos en tu detalle de usuario
         $camposCompletados = 0;
 
         if ($detalle) {
-            if (!empty($detalle->cv)) $camposCompletados++;
+            if (!empty($detalle->dpi_photo)) $camposCompletados++;
             if (!empty($detalle->direction)) $camposCompletados++;
             if (!empty($detalle->number)) $camposCompletados++;
             if (!empty($detalle->avatar)) $camposCompletados++;
             if (!empty($detalle->birthday)) $camposCompletados++;
             if (!empty($detalle->gender)) $camposCompletados++;
             if (!empty($detalle->country)) $camposCompletados++;
+            if (!empty($detalle->DPI)) $camposCompletados++;
         }
     @endphp
 
