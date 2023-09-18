@@ -27,7 +27,7 @@
                 <!-- Plazas Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                 <x-nav-link :href="route('reservas.index')" :active="request()->routeIs('reservas.index')" :class="request()->routeIs('reservas.index') ? 'nav-link-active' : ''">
-                        {{ __('Reservas') }}
+                        {{ __('SleepPlace') }}
                     </x-nav-link>
 
                 </div>
