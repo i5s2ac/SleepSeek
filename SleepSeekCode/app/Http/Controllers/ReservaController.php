@@ -70,7 +70,7 @@ class ReservaController extends Controller
      */
     public function show(string $id)
     {
-        $reserva = ReservaModel::findOrFail($id);
+        $reserva = ReservaModel::with('images')->findOrFail($id);
         return view('reservas.show', compact('reserva'));
     }
 
