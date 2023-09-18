@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ReservaImage; 
+
 
 class ReservaModel extends Model
 {
@@ -30,6 +32,14 @@ class ReservaModel extends Model
     public function user_jobs()
     {
         return $this->belongsTo(User::class, 'correo_creador', 'email');
+    }
+
+    /**
+     * Obtener las imágenes asociadas a la reserva.
+     */
+    public function images()
+    {
+        return $this->hasMany(ReservaImage::class, 'reserva_id');
     }
 }
 

@@ -28,11 +28,12 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('reservas.update',$reserva->id) }}" method="POST">
+                    <form action="{{ route('reservas.update',$reserva->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        @method('PUT')
+                        @method('PATCH')
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Other fields (Title, Description, etc.) here -->
                             <div class="form-group">
                                 <strong>Title:</strong>
                                 <input type="text" name="title" value="{{ $reserva->title }}" class="form-control" placeholder="Title">
@@ -60,11 +61,28 @@
                                     <option value="no disponible" @if($reserva->status == 'no disponible') selected @endif>No Disponible</option>
                                 </select>
                             </div>
+                            <div class="form-group col-span-full">
+                                <strong>Current Images:</strong>
+                                <div class="grid grid-cols-2 gap-4 mt-2">
+                                    @foreach ($reserva->images as $image)
+                                        <div class="relative group">
+                                            <img src="{{ asset('images/' . $image->image_path) }}" alt="Reserva Image" class="w-full h-32 object-cover rounded-md">
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="form-group col-span-full">
+                                <strong>Add/Replace Images:</strong>
+                                <div class="mt-2">
+                                    <label for="images" class="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-all duration-300">Upload Images</label>
+                                    <input type="file" name="images[]" id="images" class="hidden" multiple>
+                                    <span id="file-chosen" class="ml-4 text-gray-500">No se ha seleccionado ningún archivo</span>
+                                </div>
+                            </div>
                             <div class="col-span-full text-center">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
-
                     </form>
 
                 </div>

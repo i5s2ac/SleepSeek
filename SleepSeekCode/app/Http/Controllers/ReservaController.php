@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ReservaModel;
-
+use App\Models\ReservaImage;
 use Illuminate\Http\Request;
 
 class ReservaController extends Controller
@@ -31,26 +31,38 @@ class ReservaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
-{
-    $request->validate([
-        "title" => "required|max:30", 
-        "description" => 'required|max:255',
-        "location" => "required",
-        "start_date" => "required",
-        "end_date" => "required",
-        "status" => "required",
-    ]);
+    {
+        $request->validate([
+            "title" => "required|max:30", 
+            "description" => 'required|max:255',
+            "location" => "required",
+            "start_date" => "required",
+            "end_date" => "required",
+            "status" => "required",
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
 
-    // Creamos una nueva instancia de JobsModel
-    $reserva = new ReservaModel($request->all());
+        $reserva = new ReservaModel($request->all());
 
-    // Aquí asignas el correo del usuario autenticado:
-    $reserva->correo_creador = Auth::user()->email;
+        // Aquí asignas el correo del usuario autenticado:
+        $reserva->correo_creador = Auth::user()->email;
+        $reserva->save();
 
-    $reserva->save();
+        if($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images'), $imageName);
 
-    return redirect()->route('reservas.index')->with('success', 'Trabajo creado exitosamente');
+                $reservaImage = new ReservaImage();
+                $reservaImage->image_path = $imageName;
+                $reservaImage->reserva_id = $reserva->id;
+                $reservaImage->save();
+            }
+        }
+
+        return redirect()->route('reservas.index')->with('success', 'Reserva creada exitosamente');
     }
 
     /**
@@ -58,25 +70,19 @@ class ReservaController extends Controller
      */
     public function show(string $id)
     {
-        $reserva = ReservaModel::find($id); // Asumiendo que tu modelo se llama "ReservaModel"
-
-        if(!$reserva) {
-            // Puedes manejar el caso en el que la reserva no se encuentre
-            return redirect()->route('reservas.index')->with('error', 'Reserva no encontrada');
-        }
-
+        $reserva = ReservaModel::findOrFail($id);
         return view('reservas.show', compact('reserva'));
     }
-
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        $reserva = ReservaModel::find($id);
+        $reserva = ReservaModel::findOrFail($id);
         return view('reservas.edit', compact('reserva'));
     }
+
     /**
      * Update the specified resource in storage.
      */
@@ -89,13 +95,56 @@ class ReservaController extends Controller
             "start_date" => "required",
             "end_date" => "required",
             "status" => "required",
+            'images.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $reserva = ReservaModel::find($id);
-        $reserva->update($request->all());
+        $reserva = ReservaModel::findOrFail($id);
+
+        // Elimina las imágenes seleccionadas
+        if ($request->has('delete_images')) {
+            $imagesToDelete = $request->input('delete_images');
+            ReservaImage::whereIn('id', $imagesToDelete)->delete();
+
+            // Elimina los archivos físicos de las imágenes
+            foreach ($imagesToDelete as $imageId) {
+                $image = ReservaImage::findOrFail($imageId);
+                $imagePath = public_path('images/' . $image->image_path);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+        }
+
+        // Actualiza los campos de la reserva
+        $reserva->fill($request->only([
+            'title',
+            'description',
+            'location',
+            'start_date',
+            'end_date',
+            'status',
+        ]));
+
+        // Procesa y agrega las nuevas imágenes solo si se proporcionan
+        if ($request->hasFile('images')) {
+            // Elimina todas las imágenes existentes
+            $reserva->images()->delete();
+
+            foreach ($request->file('images') as $image) {
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images'), $imageName);
+
+                $reservaImage = new ReservaImage();
+                $reservaImage->image_path = $imageName;
+                $reservaImage->reserva_id = $reserva->id;
+                $reservaImage->save();
+            }
+        }
+
+        $reserva->save();
 
         return redirect()->route('reservas.index')
-                        ->with('success', 'Product updated successfully');
+                        ->with('success', 'Reserva actualizada exitosamente');
     }
 
 
@@ -104,11 +153,12 @@ class ReservaController extends Controller
      */
     public function destroy(string $id)
     {
-        $reserva = ReservaModel::find($id);
+        $reserva = ReservaModel::findOrFail($id);
         $reserva->delete();
 
         return redirect()->route('reservas.index')
-                        ->with('success', 'Product deleted successfully');
+                        ->with('success', 'Reserva eliminada exitosamente');
     }
+
 
 }
