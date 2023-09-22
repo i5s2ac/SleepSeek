@@ -39,6 +39,18 @@
         }
     @endphp
 
+    @if(session('error'))
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+            <div class="bg-red-200 p-4 rounded flex items-center justify-between">
+                <p class="text-white-700">
+                    {{ session('error') }}
+                </p>
+            </div>
+        </div>
+    @endif
+
+
+
     @if ($camposCompletados < $totalCampos)
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
             <div class="bg-green-200 p-4 rounded flex items-center justify-between">
@@ -88,9 +100,10 @@
                                             <p class="text-sm text-white mb-4">Status: {{ $reserva->status }}</p>
                                         </div>
                                         <!-- Botón absoluto en la parte inferior de la tarjeta -->
-                                        <a href="{{ route('reservas.show', $reserva->id) }}" class="absolute left-0 bottom-0 w-full p-4 bg-blue-500 hover:bg-blue-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">
-                                            ¡SleepIn Now!
-                                        </a>
+                                        <form method="POST" action="{{ route('reservas.solicitar', $reserva->id) }}" class="absolute left-0 bottom-0 w-full p-4 bg-blue-500 hover:bg-blue-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">
+                                            @csrf
+                                            <button type="submit">¡SleepIn Now!</button>
+                                        </form>
                                     </div>
                                 @endif
                             @endforeach

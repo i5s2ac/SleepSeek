@@ -31,10 +31,10 @@
                     </x-nav-link>
 
                 </div>
-                <!-- Chats Links -->
+                <!-- SleepIn Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('chats')" :active="request()->routeIs('chats')" :class="request()->routeIs('chats') ? 'nav-link-active' : ''">
-                        {{ __('Chats') }}
+                    <x-nav-link :href="route('SleepIn')" :active="request()->routeIs('SleepIn')" :class="request()->routeIs('SleepIn') ? 'nav-link-active' : ''">
+                        {{ __('SleepIn') }}
                     </x-nav-link>
                 </div>
 

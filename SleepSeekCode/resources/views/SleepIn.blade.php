@@ -1,0 +1,97 @@
+<x-app-layout>
+    <head>
+        <!-- ... otros enlaces y scripts que ya estén aquí ... -->
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+        <!-- Alpine.js -->
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+        <!-- ... cualquier otro contenido que ya esté dentro de <head> ... -->
+
+        <!-- Estilos de Owl Carousel -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+        <!-- Script de Owl Carousel y jQuery (necesario para Owl Carousel) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    </head>
+
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Lista de Solicitudes SleepIn') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                @if($solicitudes->count() > 0)
+                    <div class="p-6 bg-white border-b border-gray-200">
+                        <!-- Carousel Container -->
+                        <div class="owl-carousel owl-theme">
+                            @foreach ($solicitudes as $solicitud)
+                                @if (auth()->user()->id !== $solicitud->reserva->user_id)
+                                    <div x-data="{ activeImage: 0, open: false }" class="card relative rounded overflow-hidden shadow-lg">
+                                        
+                                        <!-- Carousel de Imágenes -->
+                                        <div class="owl-carousel owl-theme">
+                                            @foreach($solicitud->reserva->images as $index => $image)
+                                                <div class="item">
+                                                    <img src="{{ asset('images/' . $image->image_path) }}" alt="Reserva Image {{ $index + 1 }}" class="w-full h-64 object-cover">
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+                                        <!-- Botones para controlar el carrusel de imágenes -->
+                                        <button @click="activeImage > 0 ? activeImage-- : activeImage = 0" class="absolute z-10 top-1/2 transform -translate-y-1/2 left-2 bg-black bg-opacity-50 text-white rounded-full p-2 focus:outline-none">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </button>
+                                        <button @click="activeImage < {{ count($solicitud->reserva->images) - 1 }} ? activeImage++ : activeImage = {{ count($solicitud->reserva->images) - 1 }}" class="absolute z-10 top-1/2 transform -translate-y-1/2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2 focus:outline-none">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </button>
+
+                                        <!-- Overlay con información de la tarjeta -->
+                                        <div class="absolute bottom-0 left-0 w-full bg-black bg-opacity-70 text-white p-4">
+                                            <!-- Contenido de la tarjeta -->
+                                            <h3 class="font-bold text-xl mb-2">{{ $solicitud->reserva->title }}</h3>
+                                            <p class="text-white">{{ Str::limit($solicitud->reserva->description, 100) }}</p>
+                                            <p class="text-sm text-white mb-2">Location: {{ $solicitud->reserva->location }}</p>
+                                            <p class="text-sm text-white mb-2">Start Date: {{ $solicitud->reserva->start_date }}</p>
+                                            <p class="text-sm text-white mb-2">End Date: {{ $solicitud->reserva->end_date }}</p>
+                                            <p class="text-sm text-white">Status: {{ $solicitud->estado }}</p>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $(".owl-carousel").owlCarousel({
+                loop: false,
+                margin: 10,
+                nav: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 2
+                    },
+                    1000: {
+                        items: 3
+                    }
+                }
+            });
+        });
+    </script>
+
+</x-app-layout>

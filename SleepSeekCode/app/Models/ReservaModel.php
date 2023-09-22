@@ -41,5 +41,10 @@ class ReservaModel extends Model
     {
         return $this->hasMany(ReservaImage::class, 'reserva_id');
     }
+
+    public function solicitudes()
+    {
+        return $this->hasMany(Solicitud::class, 'reserva_id');
+    }
 }
 
