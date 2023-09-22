@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\ReservaModel;
 use App\Models\ReservaImage;
 use Illuminate\Http\Request;
+use App\Models\Solicitud;
 
 class ReservaController extends Controller
 {
@@ -160,5 +161,56 @@ class ReservaController extends Controller
                         ->with('success', 'Reserva eliminada exitosamente');
     }
 
+    public function solicitar(ReservaModel $reserva)
+    {
+        $usuario = auth()->user();
+        $perfilUsuario = $usuario->detalleUsuario;
+
+        $camposCompletados = 0;
+        // Calcula cuántos campos están completados en el perfil del usuario
+        if ($perfilUsuario) {
+            if (!empty($perfilUsuario->dpi_photo)) $camposCompletados++;
+            if (!empty($perfilUsuario->direction)) $camposCompletados++;
+            if (!empty($perfilUsuario->number)) $camposCompletados++;
+            if (!empty($perfilUsuario->avatar)) $camposCompletados++;
+            if (!empty($perfilUsuario->birthday)) $camposCompletados++;
+            if (!empty($perfilUsuario->gender)) $camposCompletados++;
+            if (!empty($perfilUsuario->country)) $camposCompletados++;
+            if (!empty($perfilUsuario->DPI)) $camposCompletados++;
+        }
+
+        $totalCampos = 8; // Total de campos en tu detalle de usuario
+
+        if ($camposCompletados < $totalCampos) {
+            // El perfil no está completo, redirige al usuario a la página de edición de perfil
+            return redirect()->route('profile.edit')->with('warning', 'Para realizar una reserva, debes completar tu perfil.');
+        }
+
+        $solicitudExistente = $reserva->solicitudes()->where('correo', $usuario->email)->exists();
+
+        if ($solicitudExistente) {
+            return redirect()->back()->with('error', 'Ya has enviado una solicitud para esta reserva. Por favor, espera la respuesta del host.');
+        }
+
+        if (!$solicitudExistente) {
+            $solicitud = new Solicitud();
+            $solicitud->correo = $usuario->email;
+            $solicitud->reserva_id = $reserva->id;
+            $solicitud->avatar = $perfilUsuario->avatar;
+            $solicitud->number = $perfilUsuario->number;
+            $solicitud->birthday = $perfilUsuario->birthday;
+            $solicitud->gender = $perfilUsuario->gender;
+            $solicitud->country = $perfilUsuario->country;
+            $solicitud->direction = $perfilUsuario->direction;
+            $solicitud->dpi_photo = $perfilUsuario->dpi_photo;
+            $solicitud->DPI = $perfilUsuario->DPI;
+            $solicitud->estado = 'pendiente'; // Puedes configurar el estado como "pendiente" por defecto
+            $solicitud->save();
+
+            return redirect()->back()->with('success', 'Solicitud de reserva enviada con éxito.');
+        }
+
+        return redirect()->back()->with('error', 'Ya has enviado una solicitud para esta reserva.');
+    }
 
 }

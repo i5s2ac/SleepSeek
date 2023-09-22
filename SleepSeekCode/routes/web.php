@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\SleepInController; // Importa el controlador SleepInController
 use App\Models\ReservaModel;
 
 
@@ -42,16 +43,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/reservas/{reserva}/edit', [ReservaController::class, 'edit'])->name('reservas.edit');
     Route::patch('/reservas/{reserva}', [ReservaController::class, 'update'])->name('reservas.update'); // Asumiendo que tienes un método update en tu controlador.
     Route::delete('/reservas/{reserva}', [ReservaController::class, 'destroy'])->name('reservas.destroy');
+    Route::post('/reservas/{reserva}/solicitar', [ReservaController::class, 'solicitar'])->name('reservas.solicitar');
+    Route::get('/mis-solicitudes', [ReservaController::class, 'misSolicitudes'])->name('reservas.mis-solicitudes');
 });
 
+Route::get('/SleepIn', [SleepInController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('SleepIn');
+    
 Route::get('/plazas', function () {
     return view('plazas');
 })->middleware(['auth'])->name('plazas');
-
-
-Route::get('/chats', function () {
-    return view('chats');
-})->middleware(['auth'])->name('chats');
 
 Route::get('/notificaciones', function () {
     return view('notificaciones');
