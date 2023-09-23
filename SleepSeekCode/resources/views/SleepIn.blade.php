@@ -41,6 +41,7 @@
                                         <button x-show="activeImage !== 0" @click="activeImage--" class="absolute z-10 top-1/2 transform -translate-y-1/2 left-2 bg-black bg-opacity-50 text-white rounded-full p-2 focus:outline-none">
                                             <i class="fas fa-chevron-left"></i>
                                         </button>
+                                        
                                         <button x-show="activeImage !== {{ $solicitud->reserva->images->count() - 1 }}" @click="activeImage++" class="absolute z-10 top-1/2 transform -translate-y-1/2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2 focus:outline-none">
                                             <i class="fas fa-chevron-right"></i>
                                         </button>
@@ -59,6 +60,12 @@
                                 @endif
                             @endforeach
                         </div>
+                    </div>
+                @else
+                    <!-- Mensaje cuando no hay solicitudes -->
+                    <div class="p-6 bg-white border-b border-gray-200 text-center">
+                        <i class="fas fa-bed fa-3x mb-2 text-gray-400"></i>
+                        <p class="text-gray-500">No has enviado ninguna solicitud de SleepIn.</p>
                     </div>
                 @endif
             </div>

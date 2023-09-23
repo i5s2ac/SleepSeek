@@ -50,14 +50,10 @@ Route::middleware('auth')->group(function () {
 Route::get('/SleepIn', [SleepInController::class, 'index'])
     ->middleware(['auth'])
     ->name('SleepIn');
-    
+
 Route::get('/plazas', function () {
     return view('plazas');
 })->middleware(['auth'])->name('plazas');
-
-Route::get('/notificaciones', function () {
-    return view('notificaciones');
-})->middleware(['auth'])->name('notificaciones');
 
 Route::get('/verPerfil', function () {
     return view('verPerfil');

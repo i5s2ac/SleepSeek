@@ -20,7 +20,7 @@
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" :class="request()->routeIs('dashboard') ? 'nav-link-active' : ''">
-                        {{ __('Dashboard') }}
+                        {{ __('SleepHome') }}
                     </x-nav-link>
                 </div>
 
@@ -38,12 +38,6 @@
                     </x-nav-link>
                 </div>
 
-                <!-- Notifications Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('notificaciones')" :active="request()->routeIs('notificaciones')" :class="request()->routeIs('notificaciones') ? 'nav-link-active' : ''">
-                        {{ __('Notificaciones') }}
-                    </x-nav-link>
-                </div>
             </div>
 
             <!-- Settings Dropdown -->
@@ -101,7 +95,7 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                {{ __('SleepHome') }}
             </x-responsive-nav-link>
         </div>
 
