@@ -18,7 +18,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('SleepHome') }}
         </h2>
     </x-slot>
 
@@ -49,7 +49,15 @@
         </div>
     @endif
 
-
+    @if(session('success'))
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+            <div class="bg-green-200 p-4 rounded flex items-center justify-between">
+                <p class="text-white-700">
+                    {{ session('success') }}
+                </p>
+            </div>
+        </div>
+    @endif
 
     @if ($camposCompletados < $totalCampos)
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
@@ -100,6 +108,9 @@
                                             <p class="text-sm text-white mb-4">Status: {{ $reserva->status }}</p>
                                         </div>
                                         <!-- Botón absoluto en la parte inferior de la tarjeta -->
+                                        <br>
+                                        <br>
+
                                         <form method="POST" action="{{ route('reservas.solicitar', $reserva->id) }}" class="absolute left-0 bottom-0 w-full p-4 bg-blue-500 hover:bg-blue-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">
                                             @csrf
                                             <button type="submit">¡SleepIn Now!</button>
@@ -108,6 +119,12 @@
                                 @endif
                             @endforeach
                         </div>
+                    </div>
+                @else
+                    <!-- Mensaje cuando no hay solicitudes -->
+                    <div class="p-6 bg-white border-b border-gray-200 text-center">
+                        <i class="fas fa-bed fa-3x mb-2 text-gray-400"></i>
+                        <p class="text-gray-500">No hay nada por el momento.</p>
                     </div>
                 @endif
             </div>
@@ -136,4 +153,3 @@
         });
     </script>
 </x-app-layout>
-                    

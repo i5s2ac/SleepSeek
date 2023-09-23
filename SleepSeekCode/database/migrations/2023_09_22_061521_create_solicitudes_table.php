@@ -15,15 +15,15 @@ return new class extends Migration
             $table->id();
             // Datos del solicitant
             $table->unsignedBigInteger('reserva_id'); // Esto crea la columna reserva_id como una clave foránea
-            $table->string('correo')->unique(); // Debería coincidir con el correo en la tabla de usuarios
+            $table->string('correo')->nullable(); // Debería coincidir con el correo en la tabla de usuarios
             $table->string('avatar')->nullable();
-            $table->string('number')->unique()->nullable();
+            $table->string('number')->nullable();
             $table->date('birthday')->nullable();
             $table->string('gender')->nullable();
             $table->string('country')->nullable();
             $table->string('direction')->nullable();
             $table->string('dpi_photo')->nullable();
-            $table->string('DPI')->unique()->nullable();
+            $table->string('DPI')->nullable();
             $table->string('estado')->default('pendiente'); // O el tipo de datos adecuado
             $table->timestamps();
         });
