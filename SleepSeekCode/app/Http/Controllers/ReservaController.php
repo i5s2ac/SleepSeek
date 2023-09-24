@@ -71,9 +71,13 @@ class ReservaController extends Controller
      */
     public function show(string $id)
     {
-        $reserva = ReservaModel::with('images')->findOrFail($id);
-        return view('reservas.show', compact('reserva'));
+        $reservas = ReservaModel::findOrFail($id);
+        $solicitudes = Solicitud::where('reserva_id', $reservas->id)->get();
+
+        return view('reservas.show', compact('reservas', 'solicitudes'));
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

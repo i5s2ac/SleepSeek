@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\SleepInController; // Importa el controlador SleepInController
 use App\Models\ReservaModel;
+use App\Models\Solicitud;
 
 
 /*
