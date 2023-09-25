@@ -216,5 +216,62 @@ class ReservaController extends Controller
 
         return redirect()->back()->with('error', 'Ya has enviado una solicitud para esta reserva.');
     }
+    
+    public function aceptarSolicitud(Solicitud $solicitud)
+    {
+        $solicitud->update(['estado' => 'aceptada']);
+        
+        // Obtener la reserva correspondiente a esta solicitud
+        $reserva = $solicitud->reserva;
+        
+        // Actualizar el estado de la reserva a "ocupado"
+        $reserva->update(['status' => 'ocupado']);
+
+        // Rechazar automáticamente el resto de las solicitudes asociadas a la misma reserva
+        $reserva->solicitudes()->where('id', '<>', $solicitud->id)->update(['estado' => 'rechazada']);
+    
+        return redirect()->back()->with('success', 'Solicitud aceptada exitosamente');
+    }
+
+    public function rechazarSolicitud(Solicitud $solicitud)
+    {
+        $solicitud->update(['estado' => 'rechazada']);
+
+        // Obtener la reserva correspondiente a esta solicitud
+        $reserva = $solicitud->reserva;
+        
+        // Actualizar el estado de la reserva a "ocupada"
+        $reserva->update(['status' => 'disponible']);
+
+        return redirect()->back()->with('success', 'Solicitud rechazada exitosamente');
+    }
+
+    public function regretSolicitud(Request $request, $id)
+    {
+        $solicitudActual = Solicitud::find($id);
+    
+        if ($solicitudActual) {
+            // Cambiar el estado de la solicitud actual a "Pendiente"
+            $solicitudActual->estado = 'pendiente';
+            $solicitudActual->save();
+    
+            // Cambiar el estado de todas las otras solicitudes relacionadas a "Pendiente"
+            $reservaId = $solicitudActual->reserva_id;
+            Solicitud::where('reserva_id', $reservaId)
+                ->where('estado', 'rechazada')
+                ->update(['estado' => 'pendiente']);
+    
+            // Obtener la reserva correspondiente a esta solicitud
+            $reserva = $solicitudActual->reserva;
+    
+            // Actualizar el estado de la reserva a "disponible"
+            $reserva->update(['status' => 'disponible']);
+    
+            // Redirigir de nuevo a la página de gestión de solicitudes
+            return redirect()->route('reservas.show', $reservaId)->with('success', 'Arrepentimiento exitoso');
+        }
+    }
+    
+
 
 }

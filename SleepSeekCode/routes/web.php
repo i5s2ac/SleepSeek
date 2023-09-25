@@ -42,10 +42,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/reservas', [ReservaController::class, 'store'])->name('reservas.store');
     Route::get('/reservas/{reserva}', [ReservaController::class, 'show'])->name('reservas.show');
     Route::get('/reservas/{reserva}/edit', [ReservaController::class, 'edit'])->name('reservas.edit');
-    Route::patch('/reservas/{reserva}', [ReservaController::class, 'update'])->name('reservas.update'); // Asumiendo que tienes un método update en tu controlador.
+    Route::patch('/reservas/{reserva}', [ReservaController::class, 'update'])->name('reservas.update'); 
     Route::delete('/reservas/{reserva}', [ReservaController::class, 'destroy'])->name('reservas.destroy');
     Route::post('/reservas/{reserva}/solicitar', [ReservaController::class, 'solicitar'])->name('reservas.solicitar');
     Route::get('/mis-solicitudes', [ReservaController::class, 'misSolicitudes'])->name('reservas.mis-solicitudes');
+    Route::post('/reservas/{solicitud}/aceptar', [ReservaController::class, 'aceptarSolicitud'])->name('reservas.aceptar');
+    Route::post('/reservas/{solicitud}/rechazar', [ReservaController::class, 'rechazarSolicitud'])->name('reservas.rechazar');
+    Route::post('/reservas/{solicitud}/regret', [ReservaController::class, 'regretSolicitud'])->name('reservas.regret');
 });
 
 Route::get('/SleepIn', [SleepInController::class, 'index'])
