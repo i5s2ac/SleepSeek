@@ -17,6 +17,43 @@
         <!-- Script de Owl Carousel y jQuery (necesario para Owl Carousel) -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+        <style>
+            /* Estilo base para los botones */
+            .custom-button {
+                display: inline-block;
+                padding: 10px 20px;
+                font-size: 16px;
+                text-align: center;
+                text-decoration: none;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            /* Estilo para el botón Aceptar */
+            .custom-button.accept {
+                background-color: #04bc78;
+                color: white;
+            }
+
+            /* Estilo para el botón Rechazar */
+            .custom-button.reject {
+                background-color: #F44336;
+                color: white;
+            }
+
+            .custom-button.regret {
+                background-color: #F1CF35;
+                color: white;
+            }
+
+            /* Estilo para el contenedor de los botones */
+            .button-container {
+                text-align: center; /* Alinea horizontalmente los botones en el centro */
+            }
+        </style>
     </head>
 
     <x-slot name="header">
@@ -25,14 +62,20 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
+    <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                
+                <div class="p-8 bg-white border-b border-gray-200 space-y-6">
+
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold">Lista de Solicitudes</h2>
+                        <a href="{{ route('reservas.index') }}" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full">
+                            Back
+                        </a>
+                    </div>
+
                     <!-- Tarjetas de Reservas -->
-                        <div class="owl-carousel owl-theme">
-                    
+                                
                                 <div x-data="{ activeImage: 0, open: false }" class="card relative rounded overflow-hidden shadow-lg">
                                     
                                     <!-- Carousel de Imágenes -->
@@ -59,20 +102,20 @@
                                         <p class="text-sm text-white mb-2">End Date: {{ $reservas->end_date }}</p>
                                         <p class="text-sm text-white mb-4">Status: {{ $reservas->status }}</p>
                                     </div>
+                                    
                                 </div>
-                        </div>
                  
                     <br>
-                    <!-- Tabla de Solicitudes -->
+
+                   <!-- Tabla de Solicitudes -->
                     @if (!$solicitudes->isEmpty())
-                        <h3 class="text-2xl font-medium mb-4">Lista de Solicitudes</h3>
                         <table class="min-w-full bg-white">
                             <thead>
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Correo</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avatar</th>
-                                    <!-- Agrega aquí las columnas adicionales que desees mostrar -->
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Solicitud</th> <!-- Columna "Opciones" -->
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acción</th> <!-- Columna "Acción" -->
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -82,13 +125,48 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <img src="{{ asset('storage/' . $solicitud->avatar) }}" alt="Avatar" class="h-10 w-10 rounded-full">
                                         </td>
-                                        <!-- Agrega aquí las celdas adicionales según los campos de solicitud -->
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $solicitud->estado }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if ($solicitud->estado == 'aceptada')
+                                                <div class="flex items-center"> <!-- Contenedor para alinear horizontalmente -->
+                                                    <span>Aceptada</span>
+                                                </div>
+                                            @elseif ($solicitud->estado == 'rechazada')
+                                                Rechazada
+                                            @else
+                                                <!-- Contenedor de los botones -->
+                                                <div class="flex">
+                                                    <!-- Botón Aceptar -->
+                                                    <form action="{{ route('reservas.aceptar', $solicitud->id) }}" method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="custom-button accept">Aceptar</button>
+                                                    </form>
+
+                                                    <!-- Botón Rechazar -->
+                                                    <form action="{{ route('reservas.rechazar', $solicitud->id) }}" method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="custom-button reject">Rechazar</button>
+                                                    </form>
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <!-- Nueva columna para el botón "Arrepentirse" -->
+                                            @if ($solicitud->estado == 'aceptada')
+                                                <form action="{{ route('reservas.regret', $solicitud->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="custom-button regret">Arrepentirse</button>
+                                                </form>
+                                            @else
+                                                <!-- Puedes agregar otro contenido aquí si lo deseas -->
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     @endif
+
+
                 </div>
             </div>
         </div>

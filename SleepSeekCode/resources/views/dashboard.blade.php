@@ -61,11 +61,11 @@
 
     @if ($camposCompletados < $totalCampos)
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
-            <div class="bg-green-200 p-4 rounded flex items-center justify-between">
+            <div class="bg-blue-200 p-4 rounded flex items-center justify-between">
                 <p class="text-white-700">
                     Has completado {{ $camposCompletados }} de {{ $totalCampos }} detalles dentro de tu perfil. 
                 </p>
-                <a href="{{ route('profile.edit') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                <a href="{{ route('profile.edit') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                     {{ __('Completar perfil') }}
                 </a>
             </div>
