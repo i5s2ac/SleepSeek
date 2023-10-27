@@ -38,13 +38,19 @@
                     </x-nav-link>
                 </div>
 
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('cupones.index')" :active="request()->routeIs('cupones.index')" :class="request()->routeIs('cupones.index') ? 'nav-link-active' : ''">
+                        {{ __('SleepCoupons') }}
+                    </x-nav-link>
+                </div>
+
             </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <div class="flex items-center"> <!-- Contenedor flex agregado -->
+                    <div class="flex items-center"> <!-- Contenedor flex agregado -->
                             @if(Auth::user()->detalleUsuario && Auth::user()->detalleUsuario->avatar)
                                 <img src="{{ asset('storage/' . Auth::user()->detalleUsuario->avatar) }}" alt="{{ __('User Avatar') }}" class="rounded-full w-8 h-8 mr-0">
                             @endif

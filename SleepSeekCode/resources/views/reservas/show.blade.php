@@ -53,6 +53,14 @@
             .button-container {
                 text-align: center; /* Alinea horizontalmente los botones en el centro */
             }
+
+            .custom-button.delete {
+                background-color: #F44336; /* Color rojo */
+                color: white;
+                display: flex; /* Hace que el contenido del botón se distribuya en una línea */
+                align-items: center; /* Centra verticalmente el ícono y el texto */
+                justify-content: center; /* Centra horizontalmente el ícono y el texto */
+            }
         </style>
     </head>
 
@@ -159,7 +167,17 @@
                                             @else
                                                 <!-- Puedes agregar otro contenido aquí si lo deseas -->
                                             @endif
+                                            
+
+                                            <form action="{{ route('solicitudes.delete', $solicitud->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="custom-button delete">
+                                                    <i class="fas fa-trash-alt"></i> 
+                                                </button>
+                                            </form>
                                         </td>
+                                        
                                     </tr>
                                 @endforeach
                             </tbody>

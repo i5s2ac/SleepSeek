@@ -53,8 +53,8 @@
                         <!-- Tarjetas de Reservas -->
                         <div class="owl-carousel owl-theme">
                             @foreach ($reservas as $reserva)
-                                <div x-data="{ activeImage: 0, open: false }" class="card relative rounded overflow-hidden shadow-lg">
-                                    
+                                <div x-data="{ activeImage: 0, open: false, isBoosted: {{ $reserva->boost ? 'true' : 'false' }} }" class="card relative rounded overflow-hidden shadow-lg">
+
                                     <!-- Carousel de Imágenes -->
                                     @foreach($reserva->images as $index => $image)
                                         <img src="{{ asset('images/' . $image->image_path) }}" alt="Reserva Image {{ $index + 1 }}" class="absolute top-0 left-0 w-full h-full object-cover" x-show="activeImage === {{ $index }}">
@@ -89,6 +89,11 @@
                                             </div>
                                         </div>
 
+                                         <!-- Lightning bolt icon for boosted reservations -->
+                                        <div x-show="isBoosted" class="absolute bottom-4 right-3 z-20">
+                                            <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
+                                        </div>
+
                                         <!-- Contenido de la tarjeta -->
                                         <h3 class="font-bold text-xl text-white mb-4">{{ $reserva->title }}</h3>
                                         <p class="text-white mb-4">{{ Str::limit($reserva->description, 100) }}</p>
@@ -97,7 +102,26 @@
                                         <p class="text-sm text-white mb-2">End Date: {{ $reserva->end_date }}</p>
                                         <p class="text-sm text-white mb-4">Status: {{ $reserva->status }}</p>
                                     </div>
+
+                                    <br>
+                                    <br>
+
+                                    <form method="POST" action="{{ route('reservas.addBoost', $reserva) }}" x-show="!isBoosted">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="absolute left-0 bottom-0 w-full p-4 bg-green-500 hover:bg-green-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">¡SleepBoost Now!</button>
+                                    </form>
+
+                                    <form method="POST" action="{{ route('reservas.removeBoost', $reserva) }}" x-show="isBoosted">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="absolute left-0 bottom-0 w-full p-4 bg-red-500 hover:bg-red-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">Delete SleepBoost</button>
+                                    </form>
+
+
                                 </div>
+
+                                
                             @endforeach
                         </div>
                     @endif

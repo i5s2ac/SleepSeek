@@ -16,4 +16,6 @@ class SleepInController extends Controller
 
         return view('SleepIn', compact('solicitudes'));
     }
+
+    
 }

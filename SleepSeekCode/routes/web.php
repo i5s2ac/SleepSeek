@@ -6,6 +6,8 @@ use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\SleepInController; // Importa el controlador SleepInController
 use App\Models\ReservaModel;
 use App\Models\Solicitud;
+use App\Http\Controllers\CuponController; // Importa el controlador SleepInController
+
 
 
 /*
@@ -49,6 +51,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/reservas/{solicitud}/aceptar', [ReservaController::class, 'aceptarSolicitud'])->name('reservas.aceptar');
     Route::post('/reservas/{solicitud}/rechazar', [ReservaController::class, 'rechazarSolicitud'])->name('reservas.rechazar');
     Route::post('/reservas/{solicitud}/regret', [ReservaController::class, 'regretSolicitud'])->name('reservas.regret');
+    
+    // Rutas para Cupones
+    Route::get('/cupones', [CuponController::class, 'index'])->name('cupones.index');
+    Route::get('/cupones/create', [CuponController::class, 'create'])->name('cupones.create');
+    Route::post('/cupones', [CuponController::class, 'store'])->name('cupones.store');
+    Route::get('/cupones/{cupon}', [CuponController::class, 'show'])->name('cupones.show');
+    Route::get('/cupones/{cupon}/edit', [CuponController::class, 'edit'])->name('cupones.edit');
+    Route::patch('/cupones/{cupon}', [CuponController::class, 'update'])->name('cupones.update'); 
+    Route::delete('/cupones/{cupon}', [CuponController::class, 'destroy'])->name('cupones.destroy');
+
+    Route::delete('/solicitudes/{id}', [ReservaController::class, 'deleteSolicitud'])->name('solicitudes.delete');
+
+    Route::patch('/reservas/{reserva}/boost', [ReservaController::class, 'addBoost'])->name('reservas.addBoost');
+    Route::delete('/reservas/{reserva}/unboost', [ReservaController::class, 'removeBoost'])->name('reservas.removeBoost');
+
+
 });
 
 Route::get('/SleepIn', [SleepInController::class, 'index'])

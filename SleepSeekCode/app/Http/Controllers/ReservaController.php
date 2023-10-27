@@ -272,6 +272,33 @@ class ReservaController extends Controller
         }
     }
     
+    public function deleteSolicitud($id)
+    {
+        $solicitud = Solicitud::findOrFail($id);
 
+        if ($solicitud) {
+            $solicitud->delete();
+            return back()->with('success', 'Solicitud eliminada correctamente.');
+        } else {
+            return back()->with('error', 'Solicitud no encontrada.');
+        }
+    }
+
+    public function addBoost(ReservaModel $reserva)
+    {
+        $reserva->boost = true;
+        $reserva->save();
+    
+        return redirect()->route('reservas.index')->with('success', 'SleepPlace boosted!');
+    }
+    
+    public function removeBoost(ReservaModel $reserva)
+    {
+        $reserva->boost = false;
+        $reserva->save();
+    
+        return redirect()->route('reservas.index')->with('success', 'SleepBoost removed!');
+    }
+    
 
 }

@@ -118,4 +118,6 @@ class ProfileController extends Controller
         return response()->download(storage_path('app/public/' . $DPIPath), $fileName);
     }
 
+    
+
 }
