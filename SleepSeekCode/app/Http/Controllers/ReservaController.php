@@ -289,7 +289,7 @@ class ReservaController extends Controller
         $reserva->boost = true;
         $reserva->save();
     
-        return redirect()->route('reservas.index')->with('success', 'SleepPlace boosted!');
+        return redirect()->route('reservas.index')->with('success', 'SleepPlace Boosted Successfully!');
     }
     
     public function removeBoost(ReservaModel $reserva)
@@ -297,8 +297,10 @@ class ReservaController extends Controller
         $reserva->boost = false;
         $reserva->save();
     
-        return redirect()->route('reservas.index')->with('success', 'SleepBoost removed!');
+        return redirect()->route('reservas.index')->with('success', 'SleepBoost Removed Successfully!');
     }
+
+   
     
 
 }

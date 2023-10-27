@@ -8,6 +8,26 @@
         </h2>
     </x-slot>
 
+    @if(session('error'))
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+            <div class="bg-red-200 p-4 rounded flex items-center justify-between">
+                <p class="text-white-700">
+                    {{ session('error') }}
+                </p>
+            </div>
+        </div>
+    @endif
+
+    @if(session('success'))
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+            <div class="bg-green-200 p-4 rounded flex items-center justify-between">
+                <p class="text-white-700">
+                    {{ session('success') }}
+                </p>
+            </div>
+        </div>
+    @endif
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -49,9 +69,6 @@
                             @endforeach
                         </tbody>
                     </table>
-
-                    <!-- Aquí puedes agregar una paginación si lo necesitas -->
-
                 </div>
             </div>
         </div>

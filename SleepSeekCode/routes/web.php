@@ -66,6 +66,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/reservas/{reserva}/boost', [ReservaController::class, 'addBoost'])->name('reservas.addBoost');
     Route::delete('/reservas/{reserva}/unboost', [ReservaController::class, 'removeBoost'])->name('reservas.removeBoost');
 
+    Route::delete('/solicitudes/{solicitud}/eliminar', [SleepInController::class, 'eliminarSolicitud'])->name('solicitudes.eliminar');
+
+
 
 });
 

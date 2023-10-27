@@ -21,6 +21,26 @@
         </h2>
     </x-slot>
 
+    @if(session('error'))
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+            <div class="bg-red-200 p-4 rounded flex items-center justify-between">
+                <p class="text-white-700">
+                    {{ session('error') }}
+                </p>
+            </div>
+        </div>
+    @endif
+
+    @if(session('success'))
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+            <div class="bg-green-200 p-4 rounded flex items-center justify-between">
+                <p class="text-white-700">
+                    {{ session('success') }}
+                </p>
+            </div>
+        </div>
+    @endif
+
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
@@ -57,6 +77,18 @@
                                             <p class="text-sm text-white mb-2">End Date: {{ $solicitud->reserva->end_date }}</p>
                                             <p class="text-sm text-white">Status: {{ $solicitud->estado }}</p>
                                         </div>
+
+                                        <br>
+                                        <br>
+
+                                        <form method="POST" action="{{ route('solicitudes.eliminar', $solicitud->id) }}" class="absolute left-0 bottom-0 w-full p-4 bg-red-500 hover:bg-red-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit">¡Cancelar SleepIn!</button>
+                                        </form>
+
+
+
                                     </div>
                                 @endif
                             @endforeach

@@ -17,5 +17,12 @@ class SleepInController extends Controller
         return view('SleepIn', compact('solicitudes'));
     }
 
+    public function eliminarSolicitud($id)
+    {
+        $solicitud = Solicitud::findOrFail($id);
+
+        $solicitud->delete();
+        return back()->with('success', 'Solicitud cancelada exitosamente.');
+    }
     
 }
