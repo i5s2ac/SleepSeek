@@ -1,5 +1,14 @@
 <x-app-layout>
 
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+
+        <!-- Font Awesome y Alpine.js (tomados del index) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    </head>
+
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Edit Coupon') }}
@@ -13,9 +22,12 @@
 
                     <div class="flex justify-between items-center">
                         <h2 class="text-2xl font-bold">Edit Coupon</h2>
-                        <a href="{{ route('cupones.index') }}" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full">
-                            Back
-                        </a>
+                        
+                        <div class="mb-0">
+                            <a class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-6 rounded text-decoration-none inline-flex items-center" href="{{ route('cupones.index') }}">
+                            <i class="fas fa-arrow-left mr-2"></i> Back
+                            </a>
+                        </div>
                     </div>
 
                     @if ($errors->any())
@@ -51,8 +63,8 @@
                             </div>
 
                             <div class="col-span-full text-center">
-                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                    Update
+                                <button type="submit" class="w-full p-4 mt-4 bg-blue-500 hover:bg-blue-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105 rounded inline-flex items-center justify-center">
+                                    <i class="fas fa-pencil-alt mr-2"></i> Update
                                 </button>
                             </div>
                         </div>

@@ -44,7 +44,6 @@
 
                     <!-- Verifica si no hay reservas y muestra un mensaje -->
                     @if ($reservas->isEmpty())
-                        <br>
                         <div class="text-center text-gray-500">
                             <i class="fas fa-bed fa-3x mb-2"></i>
                             <p>No has creado ninguna plaza de momento.</p>
@@ -118,10 +117,8 @@
                                         <button type="submit" class="absolute left-0 bottom-0 w-full p-4 bg-red-500 hover:bg-red-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">Delete SleepBoost</button>
                                     </form>
 
-
                                 </div>
-
-                                
+   
                             @endforeach
                         </div>
                     @endif
