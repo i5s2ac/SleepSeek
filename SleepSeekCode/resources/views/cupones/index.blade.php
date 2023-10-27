@@ -9,7 +9,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Lista de Cupones') }}
+            {{ __('SleepCoupons') }}
         </h2>
     </x-slot>
 
@@ -38,9 +38,9 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-8 bg-white border-b border-gray-200 space-y-6">
 
+
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-bold">Mis Cupones</h2>
-                    
 
                     <div class="mb-0">
                         <a class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-6 rounded text-decoration-none inline-flex items-center" href="{{ route('cupones.create') }}">
@@ -49,44 +49,54 @@
                     </div>
                 </div>
 
+                    @if($cupones->count() > 0) 
 
-                    <table class="min-w-full table-auto">
-                        <thead class="justify-between">
-                            <tr class="bg-gray-100">
-                                <th class="px-2 py-2">ID</th>
-                                <th class="px-2 py-2">Codigo</th>
-                                <th class="px-2 py-2">Descuento</th>
-                                <th class="px-2 py-2">Fecha Expiración</th>
-                                <th class="px-2 py-2">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-gray-200">
-                            @foreach($cupones as $cupon)
-                                <tr class="bg-white border-2 border-gray-200 hover:bg-gray-100">
-                                    <td class="px-2 py-2 text-center">{{ $cupon->id }}</td>
-                                    <td class="px-2 py-2 text-center">{{ $cupon->codigo }}</td>
-                                    <td class="px-2 py-2 text-center">{{ $cupon->descuento }}</td>
-                                    <td class="px-2 py-2 text-center">{{ $cupon->fecha_expiracion }}</td>
-                                    <td class="px-2 py-2 flex items-center justify-center"> <!-- Añadimos justify-center aquí -->
-                                        <div class="flex items-center space-x-2">
-                                            <div class="mb-0">
-                                                <a class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-6 rounded text-decoration-none inline-flex items-center" href="{{ route('cupones.edit', $cupon->id) }}">
-                                                    <i class="fas fa-cog mr-2"></i> Editar
-                                                </a>
-                                            </div>
-                                            <form action="{{ route('cupones.destroy', $cupon->id) }}" method="POST" class="bg-red-500 hover:bg-red-700 text-white py-2 px-6 rounded text-decoration-none inline-flex items-center">
-                                                @csrf
-                                                @method('DELETE')
-                                                <i class="fas fa-trash mr-2"></i> 
-                                                <button type="submit">Eliminar</button>
-                                            </form>
-                                        </div>
-                                    </td>
-
+                        <table class="min-w-full table-auto">
+                            <thead class="justify-between">
+                                <tr class="bg-gray-100">
+                                    <th class="px-2 py-2">Codigo</th>
+                                    <th class="px-2 py-2">Descuento</th>
+                                    <th class="px-2 py-2">Fecha Expiración</th>
+                                    <th class="px-2 py-2">Acciones</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="bg-gray-200">
+                                
+                                @foreach($cupones as $cupon)
+                                    @if ($cupon->user_id === auth()->id())
+
+                                        <tr class="bg-white border-2 border-gray-200 hover:bg-gray-100">
+                                            <td class="px-2 py-2 text-center">{{ $cupon->codigo }}</td>
+                                            <td class="px-2 py-2 text-center">${{ $cupon->descuento }}</td>
+                                            <td class="px-2 py-2 text-center">{{ $cupon->fecha_expiracion }}</td>
+                                            <td class="px-2 py-2 flex items-center justify-center"> <!-- Añadimos justify-center aquí -->
+                                                <div class="flex items-center space-x-2">
+                                                    <div class="mb-0">
+                                                        <a class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-6 rounded text-decoration-none inline-flex items-center" href="{{ route('cupones.edit', $cupon->id) }}">
+                                                            <i class="fas fa-cog mr-2"></i> Editar
+                                                        </a>
+                                                    </div>
+                                                    <form action="{{ route('cupones.destroy', $cupon->id) }}" method="POST" class="bg-red-500 hover:bg-red-700 text-white py-2 px-6 rounded text-decoration-none inline-flex items-center">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <i class="fas fa-trash mr-2"></i> 
+                                                        <button type="submit">Eliminar</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <!-- Mensaje cuando no hay solicitudes -->
+                        <div class="p-6 bg-white text-center">
+                            <i class="fas fa-bed fa-3x mb-2 text-gray-400"></i>
+                            <p class="text-gray-500">No hay nada por el momento.</p>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

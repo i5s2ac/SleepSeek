@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cupon;
+use App\Models\User;
 
 
 class CuponController extends Controller
 {
     public function index()
     {
-        $cupones = Cupon::all();
+        $cupones = Cupon::where('user_id', auth()->id())->get();
         return view('cupones.index', compact('cupones'));
     }
 
@@ -26,20 +27,32 @@ class CuponController extends Controller
             'descuento' => 'required|numeric',
             'fecha_expiracion' => 'nullable|date'
         ]);
-
-        Cupon::create($request->all());
+    
+        $data = $request->all();
+        $data['user_id'] = auth()->id();
+    
+        Cupon::create($data);
+    
         return redirect()->route('cupones.index')->with('success', 'Cupon creado exitosamente.');
     }
+    
 
     public function show(Cupon $cupon)
     {
+        if($cupon->user_id !== auth()->id()){
+            abort(403, 'No tienes permiso para ver este cupón.');
+        }
         return view('cupones.show', compact('cupon'));
     }
-
+    
     public function edit(Cupon $cupon)
     {
+        if($cupon->user_id !== auth()->id()){
+            abort(403, 'No tienes permiso para editar este cupón.');
+        }
         return view('cupones.edit', compact('cupon'));
     }
+    
 
     public function update(Request $request, Cupon $cupon)
     {

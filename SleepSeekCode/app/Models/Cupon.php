@@ -20,6 +20,7 @@ class Cupon extends Model
         'codigo',
         'descuento',
         'fecha_expiracion',
+        'user_id', // Agregado
     ];
 
     /**
@@ -30,4 +31,12 @@ class Cupon extends Model
     protected $casts = [
         'fecha_expiracion' => 'date',
     ];
+
+    /**
+     * Get the user that owns the cupon.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -19,6 +19,7 @@ class SleepInController extends Controller
 
     public function eliminarSolicitud($id)
     {
+        $user = User::findOrFail($id);
         $solicitud = Solicitud::findOrFail($id);
 
         $solicitud->delete();

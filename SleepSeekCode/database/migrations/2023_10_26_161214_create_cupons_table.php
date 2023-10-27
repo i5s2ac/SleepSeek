@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up()
     {
-    Schema::create('cupones', function (Blueprint $table) {
-        $table->id();
-        $table->string('codigo')->unique();
-        $table->decimal('descuento', 8, 2);
-        $table->date('fecha_expiracion')->nullable();
-        $table->timestamps();
-    });
+        Schema::create('cupones', function (Blueprint $table) {
+            $table->id();
+            $table->string('codigo')->unique();
+            $table->decimal('descuento', 8, 2);
+            $table->date('fecha_expiracion')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable(); // Clave foránea para referenciar al usuario
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->timestamps();
+        });
     }
-
+    
     /**
      * Reverse the migrations.
      */

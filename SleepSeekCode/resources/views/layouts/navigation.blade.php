@@ -12,7 +12,7 @@
 
                 <style>
                     .nav-link-active {
-                        border-bottom: 2px solid #00BF63;
+                        border-bottom: 2px solid #00BF63 !important;
                     }
                 </style>
 

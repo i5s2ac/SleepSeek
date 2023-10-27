@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Cupon;
 
 class User extends Authenticatable
 {
@@ -57,6 +58,11 @@ class User extends Authenticatable
     public function JobsUsuario()
     {
         return $this->hasOne(JobsModel::class, 'correo_creador', 'email');
+    }
+
+    public function cupones()
+    {
+        return $this->hasMany(Cupon::class);
     }
 
     public function camposFaltantes()
