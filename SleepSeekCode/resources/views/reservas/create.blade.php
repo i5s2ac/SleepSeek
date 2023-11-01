@@ -117,6 +117,14 @@
                                 </select>
                             </div>
 
+                            <div class="space-y-2">
+                                <label class="block text-gray-700 font-medium" for="boost">Boost:</label>
+                                <select class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" id="boost" name="boost">
+                                    <option value="0">No Activado</option>
+                                    <option value="1">Activado</option>
+                                </select>
+                            </div>
+
                             <div class="col-span-full text-center">
                                 <button type="submit" id="createBtnReserva" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                     Submit
@@ -138,6 +146,7 @@
                             formData.append('status', document.getElementById('status').value);
                             formData.append('start_date', document.getElementById('date_start').value);
                             formData.append('end_date', document.getElementById('date_end').value);
+                            formData.append('boost', document.getElementById('boost').value);
 
                             const images = document.getElementById('images').files;
                             for (let i = 0; i < images.length; i++) {

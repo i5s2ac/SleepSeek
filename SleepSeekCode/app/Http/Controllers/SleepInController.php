@@ -11,11 +11,15 @@ use App\Models\User;
 
 class SleepInController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user(); // Obtén el usuario actual
         $solicitudes = Solicitud::where('correo', $user->email)->get(); // Obtén las solicitudes relacionadas con el usuario
 
+        if ($request->wantsJson()) {
+            return response()->json($solicitudes, 200); // 200 es el código HTTP para "OK"
+        }
+        
         return view('SleepIn', compact('solicitudes'));
     }
 

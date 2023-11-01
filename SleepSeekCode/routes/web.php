@@ -7,6 +7,7 @@ use App\Http\Controllers\SleepInController; // Importa el controlador SleepInCon
 use App\Models\ReservaModel;
 use App\Models\Solicitud;
 use App\Http\Controllers\CuponController; // Importa el controlador SleepInController
+use App\Http\Controllers\DashboardController;
 
 
 
@@ -25,13 +26,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    $reservas = ReservaModel::where('correo_creador', '!=', auth()->user()->email)->get();
-    return view('dashboard', compact('reservas'));
-})->middleware(['auth'])->name('dashboard');
+
 
 
 Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -67,14 +69,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/reservas/{reserva}/unboost', [ReservaController::class, 'removeBoost'])->name('reservas.removeBoost');
 
     Route::delete('/solicitudes/{solicitud}/eliminar', [SleepInController::class, 'eliminarSolicitud'])->name('solicitudes.eliminar');
+    Route::get('/SleepIn', [SleepInController::class, 'index'])->name('SleepIn');
 
 
 
 });
 
-Route::get('/SleepIn', [SleepInController::class, 'index'])
-    ->middleware(['auth'])
-    ->name('SleepIn');
 
 Route::get('/plazas', function () {
     return view('plazas');

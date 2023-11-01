@@ -16,12 +16,17 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): View
+    public function edit(Request $request)
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = $request->user();
+
+        if ($request->wantsJson()) {
+            return response()->json($user, 200); // 200 es el código HTTP para "OK"
+        }
+
+        return view('profile.edit', compact('user'));
     }
+
 
     /**
      * Update the user's profile information.

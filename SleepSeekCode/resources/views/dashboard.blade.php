@@ -152,4 +152,20 @@
             });
         });
     </script>
+
+    <script>
+
+        window.onload = function() {
+            axios.get('{{ route('dashboard') }}') // Usamos la helper function de Blade para obtener la URL
+                .then(response => {
+                    const reservas = response.data; // Suponiendo que tu endpoint devuelve un array de cupones
+                    console.log(reservas); // Muestra los cupones en la consola
+                })
+                .catch(error => {
+                    console.error('Hubo un error:', error);
+                });
+        };
+
+    </script>
+
 </x-app-layout>

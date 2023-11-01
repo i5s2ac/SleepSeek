@@ -187,4 +187,20 @@
             @endif
         </div>
     </form>
+
+    <script>
+
+        window.onload = function() {
+            axios.get('{{ route('profile.edit') }}') // Usamos la helper function de Blade para obtener la URL
+                .then(response => {
+                    const $user = response.data; // Suponiendo que tu endpoint devuelve un array de cupones
+                    console.log($user); // Muestra los cupones en la consola
+                })
+                .catch(error => {
+                    console.error('Hubo un error:', error);
+                });
+        };
+
+    </script>
+
 </section>

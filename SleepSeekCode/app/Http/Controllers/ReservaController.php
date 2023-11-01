@@ -47,6 +47,8 @@ class ReservaController extends Controller
             "end_date" => "required",
             "status" => "required",
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            "boost" => "required",
+
         ]);
 
         $reserva = new ReservaModel($request->all());
@@ -96,9 +98,14 @@ class ReservaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
         $reserva = ReservaModel::findOrFail($id);
+
+        if ($request->wantsJson()) {
+            return response()->json($reservas, 200); // 200 es el código HTTP para "OK"
+        }
+
         return view('reservas.edit', compact('reserva'));
     }
 
@@ -115,6 +122,8 @@ class ReservaController extends Controller
             "end_date" => "required",
             "status" => "required",
             'images.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            "boost" => "required",
+
         ]);
 
         $reserva = ReservaModel::findOrFail($id);
@@ -142,6 +151,8 @@ class ReservaController extends Controller
             'start_date',
             'end_date',
             'status',
+            'boost',
+
         ]));
 
         // Procesa y agrega las nuevas imágenes solo si se proporcionan

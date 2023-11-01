@@ -124,6 +124,15 @@
                                 </select>
                             </div>
 
+                            <div class="space-y-2">
+                                <label class="block text-gray-700 font-medium" for="boost">Boost:</label>
+                                <select class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" name="boost">
+                                    <option value="0" @if ($reserva->boost == 0) selected @endif>Desactivado</option>
+                                    <option value="1" @if ($reserva->boost == 1) selected @endif>Activado</option>
+                                </select>
+                            </div>
+
+
                             <div class="col-span-full text-center">
                                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                     Update
@@ -202,6 +211,21 @@
             // Actualizar el mensaje de archivos seleccionados después de seleccionar archivos
             updateFileLabel();
         });
+    </script>
+
+    <script>
+        window.onload = function() {
+            const reservaUrl = '{{ route('reservas.index', $reserva->id) }}';
+
+            axios.get(reservaUrl) 
+                .then(response => {
+                    const reserva = response.data;
+                    console.log(reserva); 
+                })
+                .catch(error => {
+                    console.error('Hubo un error:', error);
+                });
+        };
     </script>
     
 </x-app-layout>
