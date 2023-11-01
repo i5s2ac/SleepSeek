@@ -144,26 +144,27 @@
                                                 <!-- Contenedor de los botones -->
                                                 <div class="flex">
                                                     <!-- Botón Aceptar -->
-                                                    <form action="{{ route('reservas.aceptar', $solicitud->id) }}" method="POST">
-                                                        @csrf
-                                                        <button type="submit" class="custom-button accept">Aceptar</button>
-                                                    </form>
+
+
+                                                    <div class="custom-button accept">
+                                                        <button dataAceptar-id="{{ $solicitud->id }}" class="submitAceptar">Aceptar</button>
+                                                    </div>
 
                                                     <!-- Botón Rechazar -->
-                                                    <form action="{{ route('reservas.rechazar', $solicitud->id) }}" method="POST">
-                                                        @csrf
-                                                        <button type="submit" class="custom-button reject">Rechazar</button>
-                                                    </form>
+
+                                                    <div class="custom-button reject">
+                                                        <button dataRechazar-id="{{ $solicitud->id }}" class="submitRechazar">Rechazar</button>
+                                                    </div>
+
                                                 </div>
                                             @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <!-- Nueva columna para el botón "Arrepentirse" -->
                                             @if ($solicitud->estado == 'aceptada')
-                                                <form action="{{ route('reservas.regret', $solicitud->id) }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="custom-button regret">Arrepentirse</button>
-                                                </form>
+                                                <div class="custom-button regret">
+                                                    <button dataRegret-id="{{ $solicitud->id }}" class="submitRegret">Arrepentirse</button>
+                                                </div>
                                             @else
                                                 <!-- Puedes agregar otro contenido aquí si lo deseas -->
                                             @endif
@@ -260,6 +261,77 @@
 
     </script>
 
+    <script>
+        document.querySelectorAll('.submitAceptar').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                
+                const SolicitudAceptarId = this.getAttribute('dataAceptar-id');
+                
+                axios({
+                    method: 'post',
+                    url: '/reservas/' + SolicitudAceptarId + '/aceptar',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log(response.data);  
+                })
+                .catch(error => {
+                    console.log(error);  
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll('.submitRechazar').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                
+                const SolicitudRechazarId = this.getAttribute('dataRechazar-id');
+                
+                axios({
+                    method: 'post',
+                    url: '/reservas/' + SolicitudRechazarId + '/rechazar',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log(response.data);  
+                })
+                .catch(error => {
+                    console.log(error);  
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll('.submitRegret').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                
+                const SolicitudRegretId = this.getAttribute('dataRegret-id');
+                
+                axios({
+                    method: 'post',
+                    url: '/reservas/' + SolicitudRegretId + '/regret',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log(response.data);  
+                })
+                .catch(error => {
+                    console.log(error);  
+                });
+            });
+        });
+    </script>
 
 
 </x-app-layout>

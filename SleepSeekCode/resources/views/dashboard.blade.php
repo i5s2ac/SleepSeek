@@ -111,10 +111,12 @@
                                         <br>
                                         <br>
 
-                                        <form method="POST" action="{{ route('reservas.solicitar', $reserva->id) }}" class="absolute left-0 bottom-0 w-full p-4 bg-blue-500 hover:bg-blue-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">
-                                            @csrf
-                                            <button type="submit">¡SleepIn Now!</button>
-                                        </form>
+                                      
+                                        <div class="absolute left-0 bottom-0 w-full p-4 bg-blue-500 hover:bg-blue-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">
+                                            <button data-id="{{ $reserva->id }}" class="submitReserva">¡SleepIn Now!</button>
+                                        </div>
+
+
                                     </div>
                                 @endif
                             @endforeach
@@ -167,5 +169,31 @@
         };
 
     </script>
+
+    <script>
+        document.querySelectorAll('.submitReserva').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                
+                const reservaId = this.getAttribute('data-id');
+                
+                axios({
+                    method: 'post',
+                    url: '/reservas/' + reservaId + '/solicitar',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log(response.data.data);  
+                })
+                .catch(error => {
+                    console.log(error);  
+                });
+            });
+        });
+    </script>
+
+
 
 </x-app-layout>

@@ -40,7 +40,7 @@ class CuponController extends Controller
         $cupon = Cupon::create($data);
 
         if ($request->wantsJson()) {
-            return response()->json($cupon, 201); // 201 es el código HTTP para "Created"
+            return response()->json($cupon, 200); 
         }
 
         return redirect()->route('cupones.index')->with('success', 'Cupon creado exitosamente.');

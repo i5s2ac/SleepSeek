@@ -87,7 +87,7 @@ class ReservaController extends Controller
             return response()->json([
                 'reserva' => $reservas,
                 'solicitudes' => $solicitudes
-            ], 200); // 200 es el código HTTP para "OK"
+            ], 200); 
         }
 
         return view('reservas.show', compact('reservas', 'solicitudes'));
@@ -193,7 +193,7 @@ class ReservaController extends Controller
         return redirect()->route('reservas.index')->with('success', 'Reserva eliminada exitosamente.');
     }
 
-    public function solicitar(ReservaModel $reserva)
+    public function solicitar(Request $request, ReservaModel $reserva)
     {
         $usuario = auth()->user();
         $perfilUsuario = $usuario->detalleUsuario;
@@ -218,34 +218,52 @@ class ReservaController extends Controller
             return redirect()->route('profile.edit')->with('warning', 'Para realizar una reserva, debes completar tu perfil.');
         }
 
+        if ($camposCompletados < $totalCampos) {
+            $message = ['status' => 'warning', 'message' => 'Para realizar una reserva, debes completar tu perfil.'];
+            if ($request->wantsJson()) {
+                return response()->json($message, 400);
+            } else {
+                return redirect()->route('profile.edit')->with($message);
+            }
+        }
+
         $solicitudExistente = $reserva->solicitudes()->where('correo', $usuario->email)->exists();
 
         if ($solicitudExistente) {
-            return redirect()->back()->with('error', 'Ya has enviado una solicitud para esta reserva. Por favor, espera la respuesta del host.');
+            $message = ['status' => 'error', 'message' => 'Ya has enviado una solicitud para esta reserva. Por favor, espera la respuesta del host.'];
+            if ($request->wantsJson()) {
+                return response()->json($message, 400);
+            } else {
+                return redirect()->back()->with($message);
+            }
         }
 
-        if (!$solicitudExistente) {
-            $solicitud = new Solicitud();
-            $solicitud->correo = $usuario->email;
-            $solicitud->reserva_id = $reserva->id;
-            $solicitud->avatar = $perfilUsuario->avatar;
-            $solicitud->number = $perfilUsuario->number;
-            $solicitud->birthday = $perfilUsuario->birthday;
-            $solicitud->gender = $perfilUsuario->gender;
-            $solicitud->country = $perfilUsuario->country;
-            $solicitud->direction = $perfilUsuario->direction;
-            $solicitud->dpi_photo = $perfilUsuario->dpi_photo;
-            $solicitud->DPI = $perfilUsuario->DPI;
-            $solicitud->estado = 'pendiente'; // Puedes configurar el estado como "pendiente" por defecto
-            $solicitud->save();
+        $solicitud = new Solicitud();
+        $solicitud->correo = $usuario->email;
+        $solicitud->reserva_id = $reserva->id;
+        $solicitud->avatar = $perfilUsuario->avatar;
+        $solicitud->number = $perfilUsuario->number;
+        $solicitud->birthday = $perfilUsuario->birthday;
+        $solicitud->gender = $perfilUsuario->gender;
+        $solicitud->country = $perfilUsuario->country;
+        $solicitud->direction = $perfilUsuario->direction;
+        $solicitud->dpi_photo = $perfilUsuario->dpi_photo;
+        $solicitud->DPI = $perfilUsuario->DPI;
+        $solicitud->estado = 'pendiente'; // Puedes configurar el estado como "pendiente" por defecto
+        $solicitud->save();
 
-            return redirect()->back()->with('success', 'Solicitud de reserva enviada con éxito.');
+        $data = $solicitud->toArray();
+
+        $message = ['status' => 'success', 'message' => 'Solicitud de reserva enviada con éxito.', 'data' => $data];
+        if ($request->wantsJson()) {
+            return response()->json($message);
+        } else {
+            return redirect()->back()->with($message);
         }
 
-        return redirect()->back()->with('error', 'Ya has enviado una solicitud para esta reserva.');
     }
     
-    public function aceptarSolicitud(Solicitud $solicitud)
+    public function aceptarSolicitud(Request $request, Solicitud $solicitud)
     {
         $solicitud->update(['estado' => 'aceptada']);
         
@@ -257,11 +275,18 @@ class ReservaController extends Controller
 
         // Rechazar automáticamente el resto de las solicitudes asociadas a la misma reserva
         $reserva->solicitudes()->where('id', '<>', $solicitud->id)->update(['estado' => 'rechazada']);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'reserva' => $reserva,
+                'solicitudes' => $solicitud
+            ], 200); 
+        }
     
         return redirect()->back()->with('success', 'Solicitud aceptada exitosamente');
     }
 
-    public function rechazarSolicitud(Solicitud $solicitud)
+    public function rechazarSolicitud(Request $request, Solicitud $solicitud)
     {
         $solicitud->update(['estado' => 'rechazada']);
 
@@ -270,6 +295,13 @@ class ReservaController extends Controller
         
         // Actualizar el estado de la reserva a "ocupada"
         $reserva->update(['status' => 'disponible']);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'reserva' => $reserva,
+                'solicitudes' => $solicitud
+            ], 200); 
+        }
 
         return redirect()->back()->with('success', 'Solicitud rechazada exitosamente');
     }
@@ -294,6 +326,12 @@ class ReservaController extends Controller
     
             // Actualizar el estado de la reserva a "disponible"
             $reserva->update(['status' => 'disponible']);
+
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'reserva' => $reserva,
+                ], 200); 
+            }
     
             // Redirigir de nuevo a la página de gestión de solicitudes
             return redirect()->route('reservas.show', $reservaId)->with('success', 'Arrepentimiento exitoso');
@@ -312,7 +350,6 @@ class ReservaController extends Controller
 
         return back()->with('success', 'Solicitud eliminada correctamente.');
     }
-
 
     public function addBoost(ReservaModel $reserva)
     {
@@ -333,8 +370,4 @@ class ReservaController extends Controller
 
         return redirect()->route('reservas.index')->with('success', 'SleepBoost Removed Successfully!');
     }
-
-   
-    
-
 }
