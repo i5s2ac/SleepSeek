@@ -9,10 +9,16 @@ use App\Models\User;
 
 class CuponController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $cupones = Cupon::where('user_id', auth()->id())->get();
+
+        if ($request->wantsJson()) {
+            return response()->json($cupones);
+        }
+
         return view('cupones.index', compact('cupones'));
+
     }
 
     public function create()
@@ -27,14 +33,19 @@ class CuponController extends Controller
             'descuento' => 'required|numeric',
             'fecha_expiracion' => 'nullable|date'
         ]);
-    
+
         $data = $request->all();
         $data['user_id'] = auth()->id();
-    
-        Cupon::create($data);
-    
+
+        $cupon = Cupon::create($data);
+
+        if ($request->wantsJson()) {
+            return response()->json($cupon, 201); // 201 es el código HTTP para "Created"
+        }
+
         return redirect()->route('cupones.index')->with('success', 'Cupon creado exitosamente.');
     }
+
     
 
     public function show(Cupon $cupon)
@@ -66,9 +77,15 @@ class CuponController extends Controller
         return redirect()->route('cupones.index')->with('success', 'Cupon actualizado exitosamente.');
     }
 
-    public function destroy(Cupon $cupon)
+    public function destroy(Request $request, Cupon $cupon)
     {
+        $deletedCupon = $cupon;  // Guarda el cupón antes de eliminarlo
         $cupon->delete();
+
+        if ($request->wantsJson()) {
+            return response()->json($deletedCupon, 200); // 200 es el código HTTP para "OK"
+        }
+
         return redirect()->route('cupones.index')->with('success', 'Cupon eliminado exitosamente.');
     }
 

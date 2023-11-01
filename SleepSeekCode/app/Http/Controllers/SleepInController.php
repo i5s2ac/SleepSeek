@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Solicitud;
+use App\Models\User;
+
 
 class SleepInController extends Controller
 {
@@ -19,11 +21,12 @@ class SleepInController extends Controller
 
     public function eliminarSolicitud($id)
     {
-        $user = User::findOrFail($id);
         $solicitud = Solicitud::findOrFail($id);
-
+    
         $solicitud->delete();
+    
         return back()->with('success', 'Solicitud cancelada exitosamente.');
     }
+    
     
 }

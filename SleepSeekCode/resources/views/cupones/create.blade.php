@@ -35,28 +35,57 @@
                         <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
                             <div class="space-y-2">
                                 <label class="block text-gray-700 font-medium" for="codigo">Code:</label>
-                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" name="codigo" type="text" placeholder="Code">
+                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" id="code" name="codigo" type="text" placeholder="Code">
                             </div>
 
                             <div class="space-y-2">
                                 <label class="block text-gray-700 font-medium" for="descuento">Discount:</label>
-                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" name="descuento" type="text" placeholder="Discount">
+                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" id="discount" name="descuento" type="text" placeholder="Discount">
                             </div>
 
                             <div class="space-y-2">
                                 <label class="block text-gray-700 font-medium" for="fecha_expiracion">Expiration Date:</label>
-                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" name="fecha_expiracion" type="date">
+                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" id="expirationDate" name="fecha_expiracion" type="date">
                             </div>
 
                             <div class="col-span-full text-center">
-                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                <button type="submit" id="createBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                     Create
                                 </button>
                             </div>
                         </div>
                     </form>
+
+                    <script>
+                        document.getElementById('createBtn').addEventListener('click', function() {
+                            event.preventDefault();
+                            const codigo = document.getElementById('code').value;
+                            const descuento = parseFloat(document.getElementById('discount').value);
+                            const fecha_expiracion = document.getElementById('expirationDate').value;
+
+                            // Definir los datos a enviar
+                            const postData = {
+                                codigo,
+                                descuento,
+                                fecha_expiracion
+                            };
+
+                            // Enviar la solicitud POST con Axios
+                            axios.post('{{ route('cupones.store') }}', postData)
+                                .then(response => {
+                                    console.log('Datos enviados exitosamente:', response.data);
+
+                                })
+                                .catch(error => {
+                                    console.error('Hubo un error al enviar los datos:', error);
+                                });
+                        });
+                    </script>
+
                 </div>
             </div>
         </div>
     </div>
+
 </x-app-layout>
+

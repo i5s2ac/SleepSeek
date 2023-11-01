@@ -12,6 +12,10 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        "cupones",
+        'cupones/*',
+        'delete',        // Agrega esta línea para excluir la ruta 'delete'
+
+
     ];
 }

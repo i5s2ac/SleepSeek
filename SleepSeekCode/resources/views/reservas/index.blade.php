@@ -80,11 +80,13 @@
                                             <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-lg z-10">
                                                 <a href="{{ route('reservas.show', $reserva->id) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Show</a>
                                                 <a href="{{ route('reservas.edit', $reserva->id) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Edit</a>
-                                                <form action="{{ route('reservas.destroy', $reserva->id) }}" method="POST" class="block">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-100">Delete</button>
-                                                </form>
+                                                
+                                                <button 
+                                                    data-reserva-id="{{ $reserva->id }}" 
+                                                    class="deleteReservaBtn w-full text-left px-4 py-2 text-red-600 hover:bg-red-100">
+                                                        Eliminar
+                                                </button>
+
                                             </div>
                                         </div>
 
@@ -111,22 +113,18 @@
                                         <button type="submit" class="absolute left-0 bottom-0 w-full p-4 bg-green-500 hover:bg-green-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">¡SleepBoost Now!</button>
                                     </form>
 
-                                    <form method="POST" action="{{ route('reservas.removeBoost', $reserva) }}" x-show="isBoosted">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="absolute left-0 bottom-0 w-full p-4 bg-red-500 hover:bg-red-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">Delete SleepBoost</button>
-                                    </form>
+                            
+                                    <button 
+                                        data-reservaBoost-id="{{ $reserva->id }}" 
+                                        class="deleteReservaBoostBtn absolute left-0 bottom-0 w-full p-4 bg-red-500 hover:bg-red-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105" x-show="isBoosted">
+                                        Delete SleepBoost
+                                    </button>
 
                                 </div>
    
                             @endforeach
                         </div>
-                    @endif
-
-                    <!-- Paginación -->
-                    <div class="mt-4">
-                        {!! $reservas->links() !!}
-                    </div>
+                    @endif                   
                 </div>
             </div>
         </div>
@@ -153,3 +151,62 @@ $(document).ready(function(){
     });
 });
 </script>
+
+<script>
+    window.onload = function() {
+        axios.get('{{ route('reservas.index') }}') // Usamos la helper function de Blade para obtener la URL
+            .then(response => {
+                const reservas = response.data; // Suponiendo que tu endpoint devuelve un array de cupones
+                console.log(reservas); // Muestra los cupones en la consola
+            })
+            .catch(error => {
+                console.error('Hubo un error:', error);
+            });
+    };
+
+</script>
+
+<script>
+
+    document.querySelectorAll('.deleteReservaBtn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.disabled = true;  // Deshabilitar el botón
+
+            const ReservaId = this.getAttribute('data-reserva-id');
+
+            axios.delete(`{{ route('reservas.destroy', '') }}/${ReservaId}`)
+                .then(response => {
+                    console.log('Reserva eliminado exitosamente:', response.data);
+                })
+                .catch(error => {
+                    console.error('Hubo un error al eliminar la reserva:', error);
+                })
+             
+        });
+    });
+
+</script>
+
+
+
+<script>
+    const baseUrl = "{{ route('reservas.removeBoost', ':id') }}";
+
+    document.querySelectorAll('.deleteReservaBoostBtn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.disabled = true;  // Deshabilitar el botón
+
+            const ReservaBoostId = this.getAttribute('data-reservaBoost-id');
+            const deleteUrl = baseUrl.replace(':id', ReservaBoostId);
+
+            axios.delete(deleteUrl)
+                .then(response => {
+                    console.log('Reserva Boost eliminado exitosamente:', response.data);
+                })
+                .catch(error => {
+                    console.error('Hubo un error al eliminar el boost de la reserva:', error);
+                });             
+        });
+    });
+</script>
+

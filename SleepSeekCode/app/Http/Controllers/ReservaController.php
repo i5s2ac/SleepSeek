@@ -12,14 +12,18 @@ class ReservaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // Aquí filtramos las reservas para mostrar solo las creadas por el usuario autenticado.
-        $reservas = ReservaModel::where('correo_creador', Auth::user()->email)->latest()->paginate(5);
+        $reservas = ReservaModel::where('correo_creador', Auth::user()->email)->latest()->get();
 
-        return view('reservas.index',compact('reservas'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+        if ($request->wantsJson()) {
+            return response()->json($reservas, 200); // 200 es el código HTTP para "OK"
+        }
+
+        return view('reservas.index', compact('reservas'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -63,16 +67,26 @@ class ReservaController extends Controller
             }
         }
 
-        return redirect()->route('reservas.index')->with('success', 'Reserva creada exitosamente');
-    }
+        if ($request->wantsJson()) {
+            return response()->json($reserva, 201); // 201 es el código HTTP para "Created"
+        }
+
+        return redirect()->route('reservas.index')->with('success', 'Cupon creado exitosamente.');    }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
         $reservas = ReservaModel::findOrFail($id);
         $solicitudes = Solicitud::where('reserva_id', $reservas->id)->get();
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'reserva' => $reservas,
+                'solicitudes' => $solicitudes
+            ], 200); // 200 es el código HTTP para "OK"
+        }
 
         return view('reservas.show', compact('reservas', 'solicitudes'));
     }
@@ -156,13 +170,16 @@ class ReservaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         $reserva = ReservaModel::findOrFail($id);
         $reserva->delete();
 
-        return redirect()->route('reservas.index')
-                        ->with('success', 'Reserva eliminada exitosamente');
+        if ($request->wantsJson()) {
+            return response()->json($reserva, 200); // 200 es el código HTTP para "OK"
+        }
+
+        return redirect()->route('reservas.index')->with('success', 'Reserva eliminada exitosamente.');
     }
 
     public function solicitar(ReservaModel $reserva)
@@ -272,17 +289,19 @@ class ReservaController extends Controller
         }
     }
     
-    public function deleteSolicitud($id)
+    public function deleteSolicitud(Request $request, $id)
     {
         $solicitud = Solicitud::findOrFail($id);
+        
+        $solicitud->delete();
 
-        if ($solicitud) {
-            $solicitud->delete();
-            return back()->with('success', 'Solicitud eliminada correctamente.');
-        } else {
-            return back()->with('error', 'Solicitud no encontrada.');
+        if ($request->wantsJson()) {
+            return response()->json($solicitud, 200); // 200 es el código HTTP para "OK"
         }
+
+        return back()->with('success', 'Solicitud eliminada correctamente.');
     }
+
 
     public function addBoost(ReservaModel $reserva)
     {
@@ -292,11 +311,15 @@ class ReservaController extends Controller
         return redirect()->route('reservas.index')->with('success', 'SleepPlace Boosted Successfully!');
     }
     
-    public function removeBoost(ReservaModel $reserva)
+    public function removeBoost(Request $request, ReservaModel $reserva)
     {
         $reserva->boost = false;
         $reserva->save();
     
+        if ($request->wantsJson()) {
+            return response()->json($reserva, 201); // 201 es el código HTTP para "Created"
+        }
+
         return redirect()->route('reservas.index')->with('success', 'SleepBoost Removed Successfully!');
     }
 

@@ -50,7 +50,7 @@
                         <!-- Carousel Container -->
                         <div class="owl-carousel owl-theme">
                             @foreach ($solicitudes as $solicitud)
-                                @if (auth()->user()->id !== $solicitud->reserva->user_id)
+                                @if ($solicitud->reserva && auth()->user()->id !== $solicitud->reserva->user_id)
                                     <div x-data="{ activeImage: 0, open: false }" class="card relative rounded overflow-hidden shadow-lg">
                                         
                                          <!-- Carousel de Imágenes -->

@@ -86,44 +86,81 @@
 
                             <div class="space-y-2">
                                 <label class="block text-gray-700 font-medium" for="title">Title:</label>
-                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" name="title" type="text" placeholder="Title">
+                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" id="title" name="title" type="text" placeholder="Title">
                             </div>
 
                             <div class="space-y-1">
                                 <label class="block text-gray-700 font-medium" for="description">Description:</label>
-                                <textarea class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" name="description" rows="3" placeholder="Description"></textarea>
+                                <textarea class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" id="description" name="description" rows="3" placeholder="Description"></textarea>
                             </div>
 
                             <div class="space-y-2">
                                 <label class="block text-gray-700 font-medium" for="location">Location:</label>
-                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" name="location" type="text" placeholder="Location">
+                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" id="location" name="location" type="text" placeholder="Location">
                             </div>
 
                             <div class="space-y-2">
                                 <label class="block text-gray-700 font-medium" for="start_date">Start Date:</label>
-                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" name="start_date" type="date">
+                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" id="date_start" name="start_date" type="date">
                             </div>
 
                             <div class="space-y-2">
                                 <label class="block text-gray-700 font-medium" for="end_date">End Date:</label>
-                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" name="end_date" type="date">
+                                <input class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" id="date_end" name="end_date" type="date">
                             </div>
 
                             <div class="space-y-2">
                                 <label class="block text-gray-700 font-medium" for="status">Status:</label>
-                                <select class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" name="status">
+                                <select class="w-full p-2 border rounded focus:border-blue-500 focus:outline-none" id="status" name="status">
                                     <option value="disponible">Disponible</option>
                                     <option value="no disponible">No Disponible</option>
                                 </select>
                             </div>
 
                             <div class="col-span-full text-center">
-                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                <button type="submit" id="createBtnReserva" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                     Submit
                                 </button>
                             </div>
+
+
                         </div>
                     </form>
+
+                    <script>
+                            document.getElementById('createBtnReserva').addEventListener('click', function(event) {
+                            event.preventDefault();
+
+                            const formData = new FormData();
+                            formData.append('title', document.getElementById('title').value);
+                            formData.append('description', document.getElementById('description').value);
+                            formData.append('location', document.getElementById('location').value);
+                            formData.append('status', document.getElementById('status').value);
+                            formData.append('start_date', document.getElementById('date_start').value);
+                            formData.append('end_date', document.getElementById('date_end').value);
+
+                            const images = document.getElementById('images').files;
+                            for (let i = 0; i < images.length; i++) {
+                                formData.append('images[]', images[i]);
+                            }
+
+                            axios({
+                                method: 'post',
+                                url: '{{ route('reservas.store') }}',
+                                data: formData,
+                                headers: {
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            })
+                            .then(response => {
+                                console.log('Datos enviados exitosamente:', response.data);
+                            })
+                            .catch(error => {
+                                console.error('Hubo un error al enviar los datos:', error);
+                            });
+                        });
+
+                    </script>
                 </div>
             </div>
         </div>

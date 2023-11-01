@@ -167,15 +167,12 @@
                                             @else
                                                 <!-- Puedes agregar otro contenido aquí si lo deseas -->
                                             @endif
-                                            
-
-                                            <form action="{{ route('solicitudes.delete', $solicitud->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="custom-button delete">
-                                                    <i class="fas fa-trash-alt"></i> 
-                                                </button>
-                                            </form>
+                                        
+                                            <button 
+                                                data-solicitud-id="{{ $solicitud->id }}" 
+                                                class="deleteSolicitudBtn custom-button delete">
+                                                <i class="fas fa-trash-alt"></i> 
+                                            </button>
                                         </td>
                                         
                                     </tr>
@@ -211,4 +208,58 @@
             });
         });
     </script>
+
+    <script>
+        window.onload = function() {
+            const reservaUrl = '{{ route('reservas.show', $reservas->id) }}';
+
+            axios.get(reservaUrl) 
+                .then(response => {
+                    const reserva = response.data;
+                    console.log(reserva); 
+                })
+                .catch(error => {
+                    console.error('Hubo un error:', error);
+                });
+        };
+    </script>
+
+    <script>
+        window.onload = function() {
+            const reservaUrl = '{{ route('reservas.show', $reservas->id) }}';
+
+            axios.get(reservaUrl) 
+                .then(response => {
+                    const reserva = response.data;
+                    console.log(reserva); 
+                })
+                .catch(error => {
+                    console.error('Hubo un error:', error);
+                });
+        };
+    </script>
+
+    <script>
+
+        document.querySelectorAll('.deleteSolicitudBtn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.disabled = true;  // Deshabilitar el botón
+
+                const solicitudId = this.getAttribute('data-solicitud-id');
+
+                axios.delete(`{{ route('solicitudes.delete', '') }}/${solicitudId}`)
+                    .then(response => {
+                        console.log('solicitud eliminado exitosamente:', response.data);
+                    })
+                    .catch(error => {
+                        console.error('Hubo un error al eliminar la solicitud:', error);
+                    })
+                
+            });
+        });
+
+    </script>
+
+
+
 </x-app-layout>
