@@ -81,11 +81,12 @@
                                         <br>
                                         <br>
 
-                                        <form method="POST" action="{{ route('solicitudes.eliminar', $solicitud->id) }}" class="absolute left-0 bottom-0 w-full p-4 bg-red-500 hover:bg-red-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit">¡Cancelar SleepIn!</button>
-                                        </form>
+                                        <button 
+                                            data-ReservaDelete-id="{{ $solicitud->id }}" 
+                                            class="deleteReservaSleepInBtn absolute left-0 bottom-0 w-full p-4 bg-red-500 hover:bg-red-600 text-center text-white font-bold transition duration-300 ease-in-out transform hover:scale-105">
+                                            ¡Cancelar SleepIn!
+                                        </button>
+
 
 
 
@@ -139,6 +140,30 @@
                 });
         };
 
+    </script>
+
+    <script>
+        document.querySelectorAll('.deleteReservaSleepInBtn').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                
+                const SleepInId = this.getAttribute('data-ReservaDelete-id');
+                
+                axios({
+                    method: 'delete',
+                    url: '/solicitudes/' + SleepInId + '/eliminar',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log(response.data);  
+                })
+                .catch(error => {
+                    console.log(error);  
+                });
+            });
+        });
     </script>
 
 </x-app-layout>

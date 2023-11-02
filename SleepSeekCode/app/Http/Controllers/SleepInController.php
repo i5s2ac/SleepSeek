@@ -23,14 +23,18 @@ class SleepInController extends Controller
         return view('SleepIn', compact('solicitudes'));
     }
 
-    public function eliminarSolicitud($id)
+    public function eliminarSolicitud(Request $request, $id)
     {
         $solicitud = Solicitud::findOrFail($id);
     
         $solicitud->delete();
-    
+
+        if ($request->wantsJson()) {
+            return response()->json($solicitud, 200); // 200 es el código HTTP para "OK"
+        }
+        
         return back()->with('success', 'Solicitud cancelada exitosamente.');
-    }
+        }
     
     
 }

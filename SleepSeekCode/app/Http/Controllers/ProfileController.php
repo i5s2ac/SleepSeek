@@ -27,7 +27,6 @@ class ProfileController extends Controller
         return view('profile.edit', compact('user'));
     }
 
-
     /**
      * Update the user's profile information.
      */

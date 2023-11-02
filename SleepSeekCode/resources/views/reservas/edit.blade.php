@@ -214,7 +214,7 @@
 
     <script>
         window.onload = function() {
-            const reservaUrl = '{{ route('reservas.index', $reserva->id) }}';
+            const reservaUrl = '{{ route('reservas.edit', $reserva->id) }}';
 
             axios.get(reservaUrl) 
                 .then(response => {

@@ -103,7 +103,7 @@ class ReservaController extends Controller
         $reserva = ReservaModel::findOrFail($id);
 
         if ($request->wantsJson()) {
-            return response()->json($reservas, 200); // 200 es el código HTTP para "OK"
+            return response()->json($reserva, 200); // 200 es el código HTTP para "OK"
         }
 
         return view('reservas.edit', compact('reserva'));
@@ -365,7 +365,7 @@ class ReservaController extends Controller
         $reserva->save();
     
         if ($request->wantsJson()) {
-            return response()->json($reserva, 201); // 201 es el código HTTP para "Created"
+            return response()->json($reserva, 200); 
         }
 
         return redirect()->route('reservas.index')->with('success', 'SleepBoost Removed Successfully!');
