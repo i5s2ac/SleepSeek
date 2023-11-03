@@ -61,14 +61,14 @@ class User extends Authenticatable
         return $this->hasOne(JobsModel::class, 'correo_creador', 'email');
     }
 
-    public function friends()
-    {
-        return $this->hasMany(Friend::class);
-    }
-
     public function cupones()
     {
         return $this->hasMany(Cupon::class);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 
     public function camposFaltantes()

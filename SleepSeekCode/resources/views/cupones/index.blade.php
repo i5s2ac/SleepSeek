@@ -113,10 +113,10 @@
 
 <script>
     window.onload = function() {
-        axios.get('{{ route('cupones.index') }}') // Usamos la helper function de Blade para obtener la URL
+        axios.get('{{ route('cupones.index') }}') 
             .then(response => {
-                const cupones = response.data; // Suponiendo que tu endpoint devuelve un array de cupones
-                console.log(cupones); // Muestra los cupones en la consola
+                const cupones = response.data; 
+                console.log(cupones); 
             })
             .catch(error => {
                 console.error('Hubo un error:', error);

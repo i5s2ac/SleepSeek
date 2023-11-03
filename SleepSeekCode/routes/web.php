@@ -8,6 +8,8 @@ use App\Models\ReservaModel;
 use App\Models\Solicitud;
 use App\Http\Controllers\CuponController; // Importa el controlador SleepInController
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PostController;
+
 
 
 
@@ -71,8 +73,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/solicitudes/{solicitud}/eliminar', [SleepInController::class, 'eliminarSolicitud'])->name('solicitudes.eliminar');
     Route::get('/SleepIn', [SleepInController::class, 'index'])->name('SleepIn');
 
-
-
+    // Rutas de Posts
+    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+    Route::patch('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
 
 

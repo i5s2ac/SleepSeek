@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('status')->default('disponible');  
             $table->boolean('boost')->nullable()->default(False);  
 
+
             $table->timestamps();
         });
 
