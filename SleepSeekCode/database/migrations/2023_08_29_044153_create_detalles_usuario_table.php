@@ -14,7 +14,7 @@ return new class extends Migration
     Schema::create('detalles_usuario', function (Blueprint $table) {
         $table->id();
         $table->string('correo')->unique();  // Esto debería coincidir con el correo en la tabla de usuarios
-        $table->string('avatar')->nullable();
+        $table->string('avatar',512)->nullable();
         $table->string('number')->unique()->nullable();
         $table->date('birthday')->nullable();
         $table->string('gender')->nullable();

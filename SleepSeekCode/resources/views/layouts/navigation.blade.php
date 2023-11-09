@@ -59,9 +59,14 @@
                     <x-slot name="trigger">
                     <div class="flex items-center"> <!-- Contenedor flex agregado -->
                             @if(Auth::user()->detalleUsuario && Auth::user()->detalleUsuario->avatar)
-                                <img src="{{ asset('storage/' . Auth::user()->detalleUsuario->avatar) }}" alt="{{ __('User Avatar') }}" class="rounded-full w-8 h-8 mr-0">
-                            @endif
+                                @php
+                                    $isExternalAvatar = preg_match('/^https?:\/\//', Auth::user()->detalleUsuario->avatar);
+                                    $avatarUrl = $isExternalAvatar ? Auth::user()->detalleUsuario->avatar : asset('storage/' . Auth::user()->detalleUsuario->avatar);
+                                @endphp
 
+                                <img src="{{ $avatarUrl }}" alt="{{ __('User Avatar') }}" class="rounded-full w-8 h-8 mr-0">
+                            @endif
+                            
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                                 <div>{{ Auth::user()->name }}</div>
                                 <div class="ml-1">

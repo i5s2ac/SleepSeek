@@ -56,7 +56,11 @@
 
                                     <!-- Carousel de Imágenes -->
                                     @foreach($reserva->images as $index => $image)
-                                        <img src="{{ asset('images/' . $image->image_path) }}" alt="Reserva Image {{ $index + 1 }}" class="absolute top-0 left-0 w-full h-full object-cover" x-show="activeImage === {{ $index }}">
+                                        @php
+                                            $isExternalUrl = preg_match('/^https?:\/\//', $image->image_path);
+                                            $imageUrl = $isExternalUrl ? $image->image_path : asset('images/' . $image->image_path);
+                                        @endphp
+                                        <img src="{{ $imageUrl }}" alt="reserva Image {{ $index + 1 }}" class="absolute top-0 left-0 w-full h-full object-cover" x-show="activeImage === {{ $index }}">
                                     @endforeach
 
                                     <!-- Botones para controlar el carrusel -->

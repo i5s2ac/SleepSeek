@@ -54,9 +54,14 @@
                                     <div class="bg-white shadow-lg rounded p-4">
 
                                     <div class="flex items-center">
-                                        @if(Auth::user()->detalleUsuario && Auth::user()->detalleUsuario->avatar)
-                                            <img src="{{ asset('storage/' . Auth::user()->detalleUsuario->avatar) }}" alt="{{ __('User Avatar') }}" class="rounded-full w-12 h-12 mr-1">
-                                        @endif
+                                    @if(Auth::user()->detalleUsuario && Auth::user()->detalleUsuario->avatar)
+                                        @php
+                                            $isExternalAvatar = preg_match('/^https?:\/\//', Auth::user()->detalleUsuario->avatar);
+                                            $avatarUrl = $isExternalAvatar ? Auth::user()->detalleUsuario->avatar : asset('storage/' . Auth::user()->detalleUsuario->avatar);
+                                        @endphp
+
+                                        <img src="{{ $avatarUrl }}" alt="{{ __('User Avatar') }}" class="rounded-full w-12 h-12 mr-0">
+                                    @endif
                                         <div class="px-4">
                                             <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
                                             <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>

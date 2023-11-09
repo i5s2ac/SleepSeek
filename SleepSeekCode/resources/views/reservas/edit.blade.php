@@ -84,8 +84,12 @@
                                 </div>
                                 <div id="preview" class="mt-4 flex space-x-3">
                                     @foreach ($reserva->images as $image)
+                                        @php
+                                            $isExternalUrl = preg_match('/^https?:\/\//', $image->image_path);
+                                            $imageUrl = $isExternalUrl ? $image->image_path : asset('images/' . $image->image_path);
+                                        @endphp
                                         <div class="image-wrapper">
-                                            <img src="{{ asset('images/' . $image->image_path) }}" alt="Reserva Image">
+                                            <img src="{{ $imageUrl }}" alt="Reserva Image">
                                         </div>
                                     @endforeach
                                 </div>

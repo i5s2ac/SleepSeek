@@ -85,11 +85,13 @@
                             @foreach ($reservas as $reserva)
                                 @if (auth()->user()->id !== $reserva->user_id)
                                     <div x-data="{ activeImage: 0, open: false }" class="card relative rounded overflow-hidden shadow-lg">
-                                        
-                                        <!-- Carousel de Imágenes -->
                                         @foreach($reserva->images as $index => $image)
-                                            <img src="{{ asset('images/' . $image->image_path) }}" alt="Reserva Image {{ $index + 1 }}" class="absolute top-0 left-0 w-full h-full object-cover" x-show="activeImage === {{ $index }}">
-                                        @endforeach
+                                            @php
+                                                $isExternalUrl = preg_match('/^https?:\/\//', $image->image_path);
+                                                $imageUrl = $isExternalUrl ? $image->image_path : asset('images/' . $image->image_path);
+                                            @endphp
+                                            <img src="{{ $imageUrl }}" alt="Reserva Image {{ $index + 1 }}" class="absolute top-0 left-0 w-full h-full object-cover" x-show="activeImage === {{ $index }}">
+                                        @endforeach                                      
 
                                         <!-- Botones para controlar el carrusel de imágenes -->
                                         <button x-show="activeImage !== 0" @click="activeImage--" class="absolute z-10 top-1/2 transform -translate-y-1/2 left-2 bg-black bg-opacity-50 text-white rounded-full p-2 focus:outline-none">
