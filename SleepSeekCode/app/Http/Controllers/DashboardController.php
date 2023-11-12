@@ -13,13 +13,13 @@ use App\Models\ReservaModel;
 class DashboardController extends Controller
 {
     public function index(Request $request)
-        {
-            $reservas = ReservaModel::where('correo_creador', '!=', auth()->user()->email)->get();
+    {
+        $reservas = ReservaModel::where('correo_creador', '!=', auth()->user()->email)->get();
 
-            if ($request->wantsJson()) {
-                return response()->json($reservas, 200); // 200 es el código HTTP para "OK"
-            }
-            
-            return view('dashboard', compact('reservas'));
+        if ($request->wantsJson()) {
+            return response()->json($reservas, 200); // 200 es el código HTTP para "OK"
         }
+
+        return view('dashboard', compact('reservas'));
+    }
 }

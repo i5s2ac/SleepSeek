@@ -56,9 +56,9 @@ class User extends Authenticatable
         return $this->hasOne(DetalleUsuario::class, 'correo', 'email');
     }
 
-    public function JobsUsuario()
+    public function ReservaUsuario()
     {
-        return $this->hasOne(JobsModel::class, 'correo_creador', 'email');
+        return $this->hasOne(ReservaModel::class, 'correo_creador', 'email');
     }
 
     public function cupones()
@@ -76,7 +76,7 @@ class User extends Authenticatable
         $detalles = $this->detalleUsuario;
         $camposFaltantes = [];
 
-        $campos = ['cv', 'direction', 'number', 'avatar', 'birthday', 'gender', 'country'];
+        $campos = ['DPI', 'direction', 'number', 'avatar', 'birthday', 'gender', 'country'];
 
         foreach ($campos as $campo) {
             if (empty($detalles->$campo)) {

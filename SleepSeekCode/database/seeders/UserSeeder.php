@@ -17,11 +17,13 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $password = 'password123'; // Cambia esto a la contraseña que desees
+
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => 'gay', // password
+            'password' => Hash::make($password), // Cifra la contraseña utilizando bcrypt
             'remember_token' => Str::random(10),
         ];
     }

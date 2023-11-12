@@ -15,7 +15,6 @@ class DetalleUsuario extends Model
     // Definir los campos que serán asignables masivamente
     protected $fillable = [
         'correo',
-        'dato_extra1',
         "avatar", 
         "number",
         "birthday",
