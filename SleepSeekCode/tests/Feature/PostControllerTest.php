@@ -138,7 +138,6 @@ class PostControllerTest extends TestCase
                 ->assertJson([
                     'PostName' => 'Ejemplo Post',
                     'PostInfo' => 'Información del post'
-                    // Otros campos que esperas en la respuesta JSON
                 ]);
     }
 

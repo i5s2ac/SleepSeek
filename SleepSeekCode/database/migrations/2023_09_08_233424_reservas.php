@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('start_date')->nullable();  
             $table->date('end_date')->nullable();  
             $table->string('status')->default('disponible');  
-            $table->boolean('boost')->nullable()->default(False);  
+            $table->boolean('boost')->nullable()->default(True);  
 
 
             $table->timestamps();
