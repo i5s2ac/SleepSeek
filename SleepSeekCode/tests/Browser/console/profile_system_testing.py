@@ -38,13 +38,9 @@ def profile(driver):
         time.sleep(2) 
         boton = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'bg-gray-800'))).click() #boton 
 
+
     except TimeoutException:
         print("Tiempo de espera agotado. Alguno de los elementos no apareció a tiempo.")
 
     except NoSuchElementException:
         print("Elemento no encontrado. Puede que alguno de los elementos no exista en la página.")
-
-    finally:
-        # Cierra el navegador en un bloque finally para asegurarte de que se cierre incluso si ocurre una excepción.
-        if 'driver' in locals() or 'driver' in globals():
-            driver.quit()
