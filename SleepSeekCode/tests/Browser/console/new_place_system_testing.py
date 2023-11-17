@@ -11,8 +11,8 @@ def new_place(driver):
     title_test = "Serene Haven Retreat"
     description_test = "Bienvenidos a un oasis de elegancia y tranquilidad en Serene Haven Retreat."
     location_test = "Serenity Valley, nestled among the Mystical Mountains"
-    date_start_test = "15112023"
-    date_end_test = "5112023"
+    date_start_test = "11152023"
+    date_end_test = "5122024"
     status_test = "disponible"
     boost_test = "1"
 

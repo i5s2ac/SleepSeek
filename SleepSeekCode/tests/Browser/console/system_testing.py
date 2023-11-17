@@ -4,6 +4,7 @@ from register_system_testing import register
 from profile_system_testing import profile
 from new_place_system_testing import new_place
 from posts_system_testing import create_post, to_edit_post, delete_post
+from coupons_system_testing import create_coupon, edit_coupon, delete_coupon
 import time
 
 
@@ -43,6 +44,26 @@ try:
     time.sleep(5)
 
     driver.get('http://127.0.0.1:8000/posts')
+    time.sleep(2)
+
+    driver.get('http://127.0.0.1:8000/reservas')
+    time.sleep(2)
+
+    driver.get('http://127.0.0.1:8000/cupones/create')
+    create_coupon(driver)
+    time.sleep(2)
+
+    driver.get('http://127.0.0.1:8000/cupones')
+    edit_coupon(driver)
+    time.sleep(2)
+
+    driver.get('http://127.0.0.1:8000/cupones')
+    delete_coupon(driver)
+    time.sleep(2)
+
+    driver.get('http://127.0.0.1:8000/cupones')
+    time.sleep(2)
+
 
 
 
