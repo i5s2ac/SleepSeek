@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from register_system_testing import register
 from profile_system_testing import profile
 from new_place_system_testing import new_place
+from posts_system_testing import create_post
 import time
 
 
@@ -25,6 +26,16 @@ try:
     new_place(driver)
 
     time.sleep(3)
+
+
+    driver.get('http://127.0.0.1:8000/posts/create')
+    create_post(driver)
+
+    time.sleep(5)
+
+    driver.get('http://127.0.0.1:8000/posts')
+
+    time.sleep(5)
 
     driver.get('http://127.0.0.1:8000/reservas')
     time.sleep(5)
