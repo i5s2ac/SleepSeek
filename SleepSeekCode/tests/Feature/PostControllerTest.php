@@ -60,64 +60,51 @@ class PostControllerTest extends TestCase
 
     public function testShow()
     {
-        // Crear un usuario y un post asociado a ese usuario
+        // Crea un usuario y un post asociado a ese usuario
         $user = User::factory()->create();
         $post = Post::factory()->create(['user_id' => $user->id]);
 
-        // Actuar como el usuario y hacer una petición GET a la ruta 'show' del PostController
         $response = $this->actingAs($user)->get(route('posts.show', $post));
 
-        // Afirmar que la respuesta tiene un status HTTP 200 (OK)
         $response->assertStatus(200);
 
-        // Afirmar que la vista retornada es la correcta
         $response->assertViewIs('posts.show');
 
-        // Opcionalmente, afirmar que la vista tiene una variable 'post' con el post correcto
         $response->assertViewHas('post', $post);
     }
 
     public function testEdit()
     {
-        // Crear un usuario y un post asociado a ese usuario
+        // Crea un usuario y un post asociado a ese usuario
         $user = User::factory()->create();
         $post = Post::factory()->create(['user_id' => $user->id]);
 
-        // Actuar como el usuario y hacer una petición GET a la ruta 'edit' del PostController
         $response = $this->actingAs($user)->get(route('posts.edit', $post));
 
-        // Afirmar que la respuesta tiene un status HTTP 200 (OK)
         $response->assertStatus(200);
 
-        // Afirmar que la vista retornada es la correcta
         $response->assertViewIs('posts.edit');
 
-        // Opcionalmente, afirmar que la vista tiene una variable 'post' con el post correcto
         $response->assertViewHas('post', $post);
     }
 
     public function testUpdate()
     {
-        // Crear un usuario y un post asociado a ese usuario
+        // Crea un usuario y un post asociado a ese usuario
         $user = User::factory()->create();
         $post = Post::factory()->create(['user_id' => $user->id]);
 
-        // Nuevos datos para actualizar el post
         $updatedData = [
             'PostName' => 'Nombre Actualizado',
             'PostInfo' => 'Información actualizada del post',
         ];
 
-        // Actuar como el usuario y enviar una petición PATCH/PUT a la ruta 'update' del PostController
         $response = $this->actingAs($user)->patch(route('posts.update', $post), $updatedData);
 
-        // Afirmar que se redirige a la ruta correcta
         $response->assertRedirect(route('posts.index'));
 
-        // Opcionalmente, comprobar el mensaje de sesión 'success'
         $response->assertSessionHas('success', 'Post actualizado con éxito.');
 
-        // Afirmar que los datos en la base de datos se han actualizado
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
             'PostName' => 'Nombre Actualizado',
@@ -165,7 +152,6 @@ class PostControllerTest extends TestCase
                     'message' => 'Post eliminado con éxito.',
                     'post_deleted' => [
                         'id' => $post->id,
-                        // Otros campos del post si los necesitas
                     ]
                 ]);
 

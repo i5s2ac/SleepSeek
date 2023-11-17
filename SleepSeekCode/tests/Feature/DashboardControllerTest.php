@@ -16,7 +16,7 @@ class DashboardControllerTest extends TestCase
         $user = User::factory()->create();
         $anotherUser = User::factory()->create();
 
-        // Crear reservas para otro usuario
+        // Crea reservas para otro usuario
         ReservaModel::factory()->create([
             'correo_creador' => $anotherUser->email,
         ]);
@@ -35,14 +35,13 @@ class DashboardControllerTest extends TestCase
         $user = User::factory()->create();
         $anotherUser = User::factory()->create();
 
-        // Crear reservas para otro usuario
+        // Crea reservas para otro usuario
         ReservaModel::factory()->create([
             'correo_creador' => $anotherUser->email,
         ]);
 
         $this->actingAs($user);
 
-        // Asegúrate de solicitar una respuesta JSON
         $response = $this->json('GET', '/dashboard');
 
         $response->assertStatus(200);
