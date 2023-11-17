@@ -56,7 +56,6 @@ public function testCamposFaltantes()
     $camposFaltantes = $user->camposFaltantes();
 
     $this->assertContains('DPI', $camposFaltantes);
-    // Agrega más aserciones según sea necesario
 }
 
 
