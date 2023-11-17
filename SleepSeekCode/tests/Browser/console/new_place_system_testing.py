@@ -12,7 +12,7 @@ def new_place(driver):
     description_test = "Bienvenidos a un oasis de elegancia y tranquilidad en Serene Haven Retreat."
     location_test = "Serenity Valley, nestled among the Mystical Mountains"
     date_start_test = "15112023"
-    date_end_test = "20112023"
+    date_end_test = "5112023"
     status_test = "disponible"
     boost_test = "1"
 
@@ -37,7 +37,7 @@ def new_place(driver):
         boost = wait.until(EC.visibility_of_element_located((By.ID, 'boost')))
         select = Select(boost)
         select.select_by_value(boost_test)
-        boton = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'bg-blue-500'))).click() 
+        boton = wait.until(EC.visibility_of_element_located((By.ID, 'createBtnReserva'))).click() 
 
     except TimeoutException:
         print("Tiempo de espera agotado. Alguno de los elementos no apareció a tiempo.")

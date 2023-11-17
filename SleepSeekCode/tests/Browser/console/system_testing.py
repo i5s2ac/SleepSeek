@@ -24,6 +24,8 @@ try:
     driver.get('http://127.0.0.1:8000/reservas/create')
     new_place(driver)
 
+    time.sleep(3)
+
     driver.get('http://127.0.0.1:8000/reservas')
     time.sleep(5)
 
