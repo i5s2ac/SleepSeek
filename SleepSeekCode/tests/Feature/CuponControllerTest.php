@@ -82,7 +82,7 @@ class CuponControllerTest extends TestCase
                 ->assertJson([
                     'codigo' => 'UNICO123', 
                     'descuento' => 10,
-                    'fecha_expiracion' => $fechaExpiracion . 'T00:00:00.000000Z' // Ajusta el formato para coincidir con la respuesta
+                    'fecha_expiracion' => $fechaExpiracion . 'T00:00:00.000000Z' 
                 ]);
     }
     
@@ -178,13 +178,11 @@ class CuponControllerTest extends TestCase
         $user = User::factory()->create();
         $cupon = Cupon::factory()->create(['user_id' => $user->id]);
 
-        // Asegúrate de que la solicitud acepta JSON
         $response = $this->actingAs($user)->deleteJson(route('cupones.destroy', $cupon));
 
         $response->assertStatus(200)
                 ->assertJson([
                     'id' => $cupon->id,
-                    // Otros campos del cupón si los necesitas
                 ]);
 
         $this->assertDatabaseMissing('cupones', ['id' => $cupon->id]);
