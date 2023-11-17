@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from register_system_testing import register
 from profile_system_testing import profile
 from new_place_system_testing import new_place
-from posts_system_testing import create_post
+from posts_system_testing import create_post, to_edit_post, delete_post
 import time
 
 
@@ -24,21 +24,26 @@ try:
 
     driver.get('http://127.0.0.1:8000/reservas/create')
     new_place(driver)
-
     time.sleep(3)
 
 
     driver.get('http://127.0.0.1:8000/posts/create')
     create_post(driver)
+    time.sleep(5)
 
+    driver.get('http://127.0.0.1:8000/posts')
+    
+
+    driver.get('http://127.0.0.1:8000/posts')
+    to_edit_post(driver)
+    time.sleep(5)
+
+    driver.get('http://127.0.0.1:8000/posts')
+    delete_post(driver)
     time.sleep(5)
 
     driver.get('http://127.0.0.1:8000/posts')
 
-    time.sleep(5)
-
-    driver.get('http://127.0.0.1:8000/reservas')
-    time.sleep(5)
 
 
 except Exception as e:
